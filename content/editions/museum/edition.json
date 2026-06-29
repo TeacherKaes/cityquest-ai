@@ -1,0 +1,126 @@
+{
+  "id": "museum",
+  "title": "Museum",
+  "subtitle": "Indoor Quest",
+  "description": "Eine ruhige Museums-Quest für Englisch, Beobachtung und Kommunikation.",
+  "language": "English",
+  "teacherLanguage": "German",
+  "rules": [
+    "Speak quietly.",
+    "Do not touch exhibits.",
+    "Stay with your partner."
+  ],
+  "landmarks": [
+    {
+      "id": "desk",
+      "name": "Information Desk",
+      "emoji": "ℹ️",
+      "x": 30,
+      "y": 45
+    },
+    {
+      "id": "gallery",
+      "name": "Art Gallery",
+      "emoji": "🖼️",
+      "x": 55,
+      "y": 40
+    },
+    {
+      "id": "cafe",
+      "name": "Museum Café",
+      "emoji": "☕",
+      "x": 72,
+      "y": 56
+    },
+    {
+      "id": "exit",
+      "name": "Exit Locker",
+      "emoji": "🔐",
+      "x": 88,
+      "y": 42
+    }
+  ],
+  "npcs": [
+    {
+      "id": "guide",
+      "name": "Museum Guide",
+      "emoji": "🧑‍🏫",
+      "style": "patient and informative"
+    },
+    {
+      "id": "visitor",
+      "name": "Visitor",
+      "emoji": "👤",
+      "style": "friendly"
+    },
+    {
+      "id": "cafe",
+      "name": "Café Staff",
+      "emoji": "☕",
+      "style": "polite"
+    }
+  ],
+  "missions": [
+    {
+      "id": "COM-001",
+      "family": "COM",
+      "title": "Ask the Guide",
+      "landmark": "desk",
+      "npc": "guide",
+      "reward": "3",
+      "objectives": [
+        "Ask politely",
+        "Listen carefully",
+        "Repeat the answer"
+      ],
+      "prompt": "Ask the guide for one useful museum tip."
+    },
+    {
+      "id": "OBS-001",
+      "family": "OBS",
+      "title": "Observe an Exhibit",
+      "landmark": "gallery",
+      "npc": "visitor",
+      "reward": "6",
+      "objectives": [
+        "Describe an object",
+        "Ask one question",
+        "Give your opinion"
+      ],
+      "prompt": "Choose one exhibit and describe what makes it interesting."
+    },
+    {
+      "id": "LIFE-001",
+      "family": "LIFE",
+      "title": "Café Recommendation",
+      "landmark": "cafe",
+      "npc": "cafe",
+      "reward": "7",
+      "objectives": [
+        "Ask for a recommendation",
+        "Ask about price",
+        "Decide together"
+      ],
+      "prompt": "Ask the café staff what they recommend."
+    },
+    {
+      "id": "FIN-001",
+      "family": "FIN",
+      "title": "Exit Locker",
+      "landmark": "exit",
+      "npc": "guide",
+      "reward": "",
+      "objectives": [
+        "Review fragments",
+        "Agree on code",
+        "Open locker"
+      ],
+      "prompt": "Use your fragments to open the final locker."
+    }
+  ],
+  "story": {
+    "title": "The Lost Ticket",
+    "hook": "A lost ticket must be returned before the museum closes.",
+    "finale": "The ticket is returned and the final message is found."
+  }
+}

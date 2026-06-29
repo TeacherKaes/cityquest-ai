@@ -1,0 +1,175 @@
+{
+  "id": "london",
+  "title": "London",
+  "subtitle": "Sprachlern-Abenteuer in London",
+  "description": "Eine englische CityQuest von Trafalgar Square bis Heathrow.",
+  "language": "English",
+  "teacherLanguage": "German",
+  "rules": [
+    "Safety always overrides gameplay.",
+    "Teacher instructions override mission logic.",
+    "Students should speak English.",
+    "Every mission should create communication."
+  ],
+  "landmarks": [
+    {
+      "id": "trafalgar",
+      "name": "Trafalgar Square",
+      "emoji": "🦁",
+      "x": 36,
+      "y": 45
+    },
+    {
+      "id": "palace",
+      "name": "Buckingham Palace",
+      "emoji": "👑",
+      "x": 28,
+      "y": 63
+    },
+    {
+      "id": "bigben",
+      "name": "Big Ben",
+      "emoji": "🕰️",
+      "x": 50,
+      "y": 55
+    },
+    {
+      "id": "covent",
+      "name": "Covent Garden",
+      "emoji": "🎭",
+      "x": 59,
+      "y": 42
+    },
+    {
+      "id": "tower",
+      "name": "Tower Bridge",
+      "emoji": "🌉",
+      "x": 73,
+      "y": 64
+    },
+    {
+      "id": "heathrow",
+      "name": "Heathrow Airport",
+      "emoji": "✈️",
+      "x": 86,
+      "y": 36
+    }
+  ],
+  "npcs": [
+    {
+      "id": "tourist",
+      "name": "Tourist",
+      "emoji": "👩",
+      "style": "friendly and curious"
+    },
+    {
+      "id": "photographer",
+      "name": "Photographer",
+      "emoji": "📸",
+      "style": "creative and observant"
+    },
+    {
+      "id": "shop",
+      "name": "Shop Assistant",
+      "emoji": "☕",
+      "style": "polite and practical"
+    },
+    {
+      "id": "airport",
+      "name": "Airport Staff",
+      "emoji": "🛫",
+      "style": "clear and calm"
+    }
+  ],
+  "missions": [
+    {
+      "id": "COM-001",
+      "family": "COM",
+      "title": "Ask for a Recommendation",
+      "landmark": "trafalgar",
+      "npc": "tourist",
+      "reward": "4",
+      "objectives": [
+        "Say hello politely",
+        "Ask for a recommendation",
+        "Say thank you"
+      ],
+      "prompt": "Ask a tourist which place nearby they would recommend."
+    },
+    {
+      "id": "OBS-001",
+      "family": "OBS",
+      "title": "Best Viewpoint",
+      "landmark": "palace",
+      "npc": "photographer",
+      "reward": "8",
+      "objectives": [
+        "Compare two viewpoints",
+        "Describe one detail",
+        "Explain your choice"
+      ],
+      "prompt": "Find the best viewpoint for a photo of Buckingham Palace."
+    },
+    {
+      "id": "NAV-001",
+      "family": "NAV",
+      "title": "Explain the Route",
+      "landmark": "bigben",
+      "npc": "tourist",
+      "reward": "2",
+      "objectives": [
+        "Use two direction words",
+        "Explain a route",
+        "Check understanding"
+      ],
+      "prompt": "Explain a short route near Big Ben to a traveller."
+    },
+    {
+      "id": "LIFE-001",
+      "family": "LIFE",
+      "title": "Small Recommendation",
+      "landmark": "covent",
+      "npc": "shop",
+      "reward": "9",
+      "objectives": [
+        "Ask for a recommendation",
+        "Ask about price",
+        "Decide together"
+      ],
+      "prompt": "Ask a shop assistant for a small recommendation."
+    },
+    {
+      "id": "STORY-001",
+      "family": "STORY",
+      "title": "The Bridge Clue",
+      "landmark": "tower",
+      "npc": "photographer",
+      "reward": "1",
+      "objectives": [
+        "Ask two follow-up questions",
+        "Connect the clue",
+        "Tell your partner"
+      ],
+      "prompt": "A photographer remembers part of the story. Ask follow-up questions."
+    },
+    {
+      "id": "FIN-001",
+      "family": "FIN",
+      "title": "The Heathrow Locker",
+      "landmark": "heathrow",
+      "npc": "airport",
+      "reward": "",
+      "objectives": [
+        "Review all fragments",
+        "Agree on the code",
+        "Open the locker"
+      ],
+      "prompt": "Review your code fragments and open the final locker."
+    }
+  ],
+  "story": {
+    "title": "The Locker at Heathrow",
+    "hook": "A traveller has locked important passports at Heathrow. The code was split into clues across London.",
+    "finale": "The locker opens and the travel documents are found."
+  }
+}
