@@ -1,0 +1,187 @@
+{
+  "id": "chemistry",
+  "title": "Chemie",
+  "subtitle": "Stoffe, Reaktionen, Trennung, Säuren/Laugen",
+  "description": "Fachquest für Chemie/Naturwissenschaften mit sicherem Beobachten, Stoffeigenschaften, Reaktionsdeutung und Protokollieren.",
+  "language": "German",
+  "teacherLanguage": "German",
+  "subject": "Chemie",
+  "klpOrientation": {
+    "source": "KLP NRW Naturwissenschaften Gesamtschule Sek I / Kompetenzorientierung",
+    "competenceAreas": [
+      "Umgang mit Fachwissen",
+      "Erkenntnisgewinnung",
+      "Kommunikation",
+      "Bewertung"
+    ],
+    "note": "Die Chemie-Quests sind als sichere, schulische Lernaufgaben formuliert. Experimente dürfen nur nach schulischer Gefährdungsbeurteilung und Lehrkraftfreigabe durchgeführt werden."
+  },
+  "rules": [
+    "Keine Experimente ohne ausdrückliche Freigabe der Lehrkraft.",
+    "Schutzbrille und Sicherheitsregeln haben Vorrang.",
+    "Keine Geschmacksproben.",
+    "Chemikalien werden nicht eigenständig gemischt.",
+    "Beobachtung und Deutung werden getrennt."
+  ],
+  "landmarks": [
+    {
+      "id": "ch-start",
+      "name": "Start im Chemieraum",
+      "emoji": "🧪",
+      "x": 20,
+      "y": 50
+    },
+    {
+      "id": "ch-safety",
+      "name": "Sicherheitsstation",
+      "emoji": "🥽",
+      "x": 34,
+      "y": 40
+    },
+    {
+      "id": "ch-material",
+      "name": "Materialtisch",
+      "emoji": "⚗️",
+      "x": 50,
+      "y": 55
+    },
+    {
+      "id": "ch-separation",
+      "name": "Trennverfahren",
+      "emoji": "🧲",
+      "x": 64,
+      "y": 44
+    },
+    {
+      "id": "ch-reaction",
+      "name": "Reaktionsstation",
+      "emoji": "🔥",
+      "x": 78,
+      "y": 58
+    },
+    {
+      "id": "ch-final",
+      "name": "Auswertungstafel",
+      "emoji": "📊",
+      "x": 88,
+      "y": 48
+    }
+  ],
+  "npcs": [
+    {
+      "id": "lab_assistant",
+      "name": "Laborassistenz",
+      "emoji": "🧑‍🔬",
+      "style": "präzise, sicherheitsbewusst, unterstützend"
+    },
+    {
+      "id": "safety_officer",
+      "name": "Sicherheitsbeauftragte/r",
+      "emoji": "🥽",
+      "style": "klar, konsequent, ruhig"
+    },
+    {
+      "id": "student",
+      "name": "Mitschüler/in",
+      "emoji": "🧑‍🎓",
+      "style": "neugierig, manchmal unsicher"
+    }
+  ],
+  "missions": [
+    {
+      "id": "CH-SAFE-001",
+      "family": "SAFE",
+      "title": "Sicherheitscheck",
+      "landmark": "ch-safety",
+      "npc": "safety_officer",
+      "reward": "1",
+      "klp": [
+        "Bewertung",
+        "Kommunikation"
+      ],
+      "objectives": [
+        "Drei Sicherheitsregeln nennen",
+        "Eine Regel begründen",
+        "Gefahrenquelle erkennen"
+      ],
+      "prompt": "Prüft die Sicherheitsstation. Nennt drei wichtige Sicherheitsregeln und erklärt, warum eine davon besonders wichtig ist."
+    },
+    {
+      "id": "CH-MAT-001",
+      "family": "OBS",
+      "title": "Stoffeigenschaften beschreiben",
+      "landmark": "ch-material",
+      "npc": "lab_assistant",
+      "reward": "6",
+      "klp": [
+        "Umgang mit Fachwissen",
+        "Erkenntnisgewinnung"
+      ],
+      "objectives": [
+        "Mindestens drei Eigenschaften beschreiben",
+        "Beobachtung von Deutung trennen",
+        "Eine Verwendung ableiten"
+      ],
+      "prompt": "Beschreibt einen Stoff nur anhand sicher beobachtbarer Eigenschaften. Leitet daraus eine mögliche Verwendung ab."
+    },
+    {
+      "id": "CH-SEP-001",
+      "family": "SCI",
+      "title": "Trennverfahren auswählen",
+      "landmark": "ch-separation",
+      "npc": "lab_assistant",
+      "reward": "3",
+      "klp": [
+        "Erkenntnisgewinnung",
+        "Umgang mit Fachwissen"
+      ],
+      "objectives": [
+        "Gemisch beschreiben",
+        "Geeignetes Trennverfahren wählen",
+        "Auswahl begründen"
+      ],
+      "prompt": "Wählt für ein beschriebenes Stoffgemisch ein geeignetes Trennverfahren und begründet eure Entscheidung fachlich."
+    },
+    {
+      "id": "CH-REA-001",
+      "family": "SCI",
+      "title": "Reaktion oder Mischung?",
+      "landmark": "ch-reaction",
+      "npc": "student",
+      "reward": "8",
+      "klp": [
+        "Umgang mit Fachwissen",
+        "Kommunikation"
+      ],
+      "objectives": [
+        "Beobachtung beschreiben",
+        "Hinweise auf Stoffumwandlung nennen",
+        "Edukte und Produkte unterscheiden"
+      ],
+      "prompt": "Entscheidet anhand einer beschriebenen Situation, ob eher eine Mischung oder eine chemische Reaktion vorliegt."
+    },
+    {
+      "id": "CH-FIN-001",
+      "family": "FIN",
+      "title": "Chemie-Auswertung",
+      "landmark": "ch-final",
+      "npc": "lab_assistant",
+      "reward": "",
+      "klp": [
+        "Kommunikation",
+        "Bewertung"
+      ],
+      "objectives": [
+        "Ergebnisse ordnen",
+        "Fachbegriffe korrekt verwenden",
+        "Code eingeben"
+      ],
+      "prompt": "Fasst eure chemischen Entscheidungen zusammen. Achtet darauf, Beobachtung und Deutung sauber zu trennen."
+    }
+  ],
+  "story": {
+    "title": "Der Labor-Code",
+    "hook": "Ein Laborprotokoll wurde verschlüsselt. Nur wer sicher beobachtet und fachlich begründet, kann den Code rekonstruieren.",
+    "finale": "Das Protokoll wird entschlüsselt und die Laborstationen werden fachlich ausgewertet."
+  }
+}

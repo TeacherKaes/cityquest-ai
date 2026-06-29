@@ -1,0 +1,178 @@
+{
+  "id": "nw",
+  "title": "Naturwissenschaften",
+  "subtitle": "Beobachten, Messen, Protokollieren, Bewerten",
+  "description": "Generische NW-Quest für Sekundarstufe I mit naturwissenschaftlichem Arbeiten im Mittelpunkt.",
+  "language": "German",
+  "teacherLanguage": "German",
+  "subject": "Naturwissenschaften",
+  "klpOrientation": {
+    "source": "KLP NRW Naturwissenschaften Gesamtschule Sek I",
+    "competenceAreas": [
+      "Umgang mit Fachwissen",
+      "Erkenntnisgewinnung",
+      "Kommunikation",
+      "Bewertung"
+    ],
+    "note": "Diese Edition dient als generischer Kompetenzrahmen für Biologie, Chemie und Physik."
+  },
+  "rules": [
+    "Sicherheit hat Vorrang.",
+    "Messungen werden nachvollziehbar dokumentiert.",
+    "Vermutungen werden von Beobachtungen unterschieden.",
+    "Ergebnisse werden gemeinsam reflektiert."
+  ],
+  "landmarks": [
+    {
+      "id": "nw-start",
+      "name": "Startstation",
+      "emoji": "🔎",
+      "x": 18,
+      "y": 50
+    },
+    {
+      "id": "nw-question",
+      "name": "Fragestation",
+      "emoji": "❓",
+      "x": 34,
+      "y": 40
+    },
+    {
+      "id": "nw-observe",
+      "name": "Beobachtungsstation",
+      "emoji": "👁️",
+      "x": 52,
+      "y": 55
+    },
+    {
+      "id": "nw-measure",
+      "name": "Messstation",
+      "emoji": "📏",
+      "x": 66,
+      "y": 44
+    },
+    {
+      "id": "nw-model",
+      "name": "Modellstation",
+      "emoji": "🧩",
+      "x": 76,
+      "y": 62
+    },
+    {
+      "id": "nw-final",
+      "name": "Auswertung",
+      "emoji": "📋",
+      "x": 88,
+      "y": 48
+    }
+  ],
+  "npcs": [
+    {
+      "id": "science_coach",
+      "name": "Science Coach",
+      "emoji": "🧑‍🔬",
+      "style": "fragend, strukturierend, ermutigend"
+    },
+    {
+      "id": "student",
+      "name": "Mitschüler/in",
+      "emoji": "🧑‍🎓",
+      "style": "neugierig, alltagsnah"
+    }
+  ],
+  "missions": [
+    {
+      "id": "NW-FRAGE-001",
+      "family": "SCI",
+      "title": "Forschungsfrage bilden",
+      "landmark": "nw-question",
+      "npc": "science_coach",
+      "reward": "2",
+      "klp": [
+        "Erkenntnisgewinnung"
+      ],
+      "objectives": [
+        "Alltagsbeobachtung nennen",
+        "Forschungsfrage formulieren",
+        "Hypothese bilden"
+      ],
+      "prompt": "Formuliert aus einer Alltagsbeobachtung eine überprüfbare naturwissenschaftliche Frage und eine passende Hypothese."
+    },
+    {
+      "id": "NW-OBS-001",
+      "family": "OBS",
+      "title": "Genau beobachten",
+      "landmark": "nw-observe",
+      "npc": "student",
+      "reward": "4",
+      "klp": [
+        "Erkenntnisgewinnung",
+        "Kommunikation"
+      ],
+      "objectives": [
+        "Beobachtung ohne Deutung formulieren",
+        "Deutung getrennt ergänzen",
+        "Partnerfeedback geben"
+      ],
+      "prompt": "Beschreibt eine Beobachtung zunächst ohne Erklärung. Ergänzt erst danach eine mögliche Deutung."
+    },
+    {
+      "id": "NW-MESS-001",
+      "family": "SCI",
+      "title": "Messung planen",
+      "landmark": "nw-measure",
+      "npc": "science_coach",
+      "reward": "6",
+      "klp": [
+        "Erkenntnisgewinnung"
+      ],
+      "objectives": [
+        "Messgröße bestimmen",
+        "Messgerät auswählen",
+        "Fehlerquelle nennen"
+      ],
+      "prompt": "Plant eine einfache Messung. Welche Größe wird gemessen, womit wird gemessen und welche Fehlerquelle könnte auftreten?"
+    },
+    {
+      "id": "NW-MOD-001",
+      "family": "SCI",
+      "title": "Modell nutzen",
+      "landmark": "nw-model",
+      "npc": "science_coach",
+      "reward": "8",
+      "klp": [
+        "Umgang mit Fachwissen",
+        "Kommunikation"
+      ],
+      "objectives": [
+        "Modell beschreiben",
+        "Grenze des Modells nennen",
+        "Nutzen erklären"
+      ],
+      "prompt": "Erklärt ein einfaches Modell. Was zeigt es gut, und wo ist es vereinfacht?"
+    },
+    {
+      "id": "NW-FIN-001",
+      "family": "FIN",
+      "title": "NW-Auswertung",
+      "landmark": "nw-final",
+      "npc": "science_coach",
+      "reward": "",
+      "klp": [
+        "Kommunikation",
+        "Bewertung"
+      ],
+      "objectives": [
+        "Ergebnisse zusammenfassen",
+        "Hypothese prüfen",
+        "Code eingeben"
+      ],
+      "prompt": "Fasst zusammen, ob eure Hypothese unterstützt wurde. Welche Frage bleibt offen?"
+    }
+  ],
+  "story": {
+    "title": "Die Forschermappe",
+    "hook": "Eine Forschermappe enthält mehrere unvollständige Arbeitsschritte. Nur durch gutes naturwissenschaftliches Arbeiten lässt sie sich vervollständigen.",
+    "finale": "Die Forschermappe wird vervollständigt und der Forschungsprozess reflektiert."
+  }
+}

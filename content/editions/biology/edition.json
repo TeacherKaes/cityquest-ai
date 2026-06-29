@@ -1,0 +1,186 @@
+{
+  "id": "biology",
+  "title": "Biologie",
+  "subtitle": "Ökosysteme, Pflanzen, Tiere, Mikroskopie",
+  "description": "Fachquest für Biologie/Naturwissenschaften mit Beobachten, Vergleichen, Modellieren und Reflektieren.",
+  "language": "German",
+  "teacherLanguage": "German",
+  "subject": "Biologie",
+  "klpOrientation": {
+    "source": "KLP NRW Naturwissenschaften Gesamtschule Sek I / Kompetenzorientierung",
+    "competenceAreas": [
+      "Umgang mit Fachwissen",
+      "Erkenntnisgewinnung",
+      "Kommunikation",
+      "Bewertung"
+    ],
+    "note": "Die Einträge sind didaktisch am KLP NRW orientiert und müssen vor produktivem Schuleinsatz mit dem konkreten schulinternen Lehrplan abgeglichen werden."
+  },
+  "rules": [
+    "Sicherheit und Aufsicht haben Vorrang.",
+    "Es werden keine Tiere gestört oder Pflanzen beschädigt.",
+    "Beobachtungen werden sachlich beschrieben.",
+    "Vermutungen werden als Hypothesen formuliert.",
+    "Jede Mission endet mit einer kurzen Sicherung."
+  ],
+  "landmarks": [
+    {
+      "id": "bio-start",
+      "name": "Startpunkt",
+      "emoji": "🌱",
+      "x": 18,
+      "y": 50
+    },
+    {
+      "id": "bio-tree",
+      "name": "Baumstandort",
+      "emoji": "🌳",
+      "x": 34,
+      "y": 40
+    },
+    {
+      "id": "bio-meadow",
+      "name": "Wiese / Randstreifen",
+      "emoji": "🌾",
+      "x": 52,
+      "y": 55
+    },
+    {
+      "id": "bio-soil",
+      "name": "Bodenstelle",
+      "emoji": "🪱",
+      "x": 66,
+      "y": 44
+    },
+    {
+      "id": "bio-water",
+      "name": "Gewässerrand",
+      "emoji": "💧",
+      "x": 76,
+      "y": 62
+    },
+    {
+      "id": "bio-final",
+      "name": "Auswertungspunkt",
+      "emoji": "📋",
+      "x": 88,
+      "y": 48
+    }
+  ],
+  "npcs": [
+    {
+      "id": "ranger",
+      "name": "Natur-Guide",
+      "emoji": "🧑‍🌾",
+      "style": "ruhig, naturkundlich, fragend"
+    },
+    {
+      "id": "researcher",
+      "name": "Biologin",
+      "emoji": "🔬",
+      "style": "fachlich, unterstützend, präzise"
+    },
+    {
+      "id": "student",
+      "name": "Mitschüler/in",
+      "emoji": "🧑‍🎓",
+      "style": "neugierig, alltagsnah"
+    }
+  ],
+  "missions": [
+    {
+      "id": "BIO-OBS-001",
+      "family": "OBS",
+      "title": "Blätter vergleichen",
+      "landmark": "bio-tree",
+      "npc": "ranger",
+      "reward": "2",
+      "klp": [
+        "Erkenntnisgewinnung",
+        "Kommunikation"
+      ],
+      "objectives": [
+        "Zwei Blätter genau betrachten",
+        "Mindestens drei Merkmale vergleichen",
+        "Eine begründete Vermutung formulieren"
+      ],
+      "prompt": "Vergleicht zwei unterschiedliche Blätter. Achtet auf Blattform, Blattrand, Blattnerven und Anordnung. Formuliert anschließend eine Vermutung, warum diese Merkmale nützlich sein könnten."
+    },
+    {
+      "id": "BIO-ECO-001",
+      "family": "OBS",
+      "title": "Mini-Ökosystem untersuchen",
+      "landmark": "bio-meadow",
+      "npc": "researcher",
+      "reward": "5",
+      "klp": [
+        "Umgang mit Fachwissen",
+        "Erkenntnisgewinnung"
+      ],
+      "objectives": [
+        "Lebende und nicht lebende Faktoren nennen",
+        "Eine Wechselwirkung beschreiben",
+        "Ein einfaches Wirkungsgefüge erklären"
+      ],
+      "prompt": "Untersucht die Umgebung wie ein kleines Ökosystem. Welche Lebewesen, abiotischen Faktoren und Wechselwirkungen könnt ihr erkennen?"
+    },
+    {
+      "id": "BIO-SOIL-001",
+      "family": "SCI",
+      "title": "Boden als Lebensraum",
+      "landmark": "bio-soil",
+      "npc": "ranger",
+      "reward": "7",
+      "klp": [
+        "Erkenntnisgewinnung",
+        "Bewertung"
+      ],
+      "objectives": [
+        "Bodenprobe visuell beschreiben",
+        "Feuchtigkeit und Struktur einschätzen",
+        "Bedeutung für Lebewesen erklären"
+      ],
+      "prompt": "Beschreibt eine Bodenstelle, ohne sie stark zu verändern. Welche Hinweise zeigen, dass Boden ein Lebensraum ist?"
+    },
+    {
+      "id": "BIO-COM-001",
+      "family": "COM",
+      "title": "Fachbegriff erklären",
+      "landmark": "bio-water",
+      "npc": "student",
+      "reward": "4",
+      "klp": [
+        "Kommunikation"
+      ],
+      "objectives": [
+        "Einen Fachbegriff auswählen",
+        "Alltagssprachlich erklären",
+        "Ein Beispiel nennen"
+      ],
+      "prompt": "Erklärt einer Mitschülerin oder einem Mitschüler einen biologischen Fachbegriff so einfach, dass ihn auch eine 5. Klasse verstehen würde."
+    },
+    {
+      "id": "BIO-FIN-001",
+      "family": "FIN",
+      "title": "Bio-Auswertung",
+      "landmark": "bio-final",
+      "npc": "researcher",
+      "reward": "",
+      "klp": [
+        "Kommunikation",
+        "Bewertung"
+      ],
+      "objectives": [
+        "Beobachtungen ordnen",
+        "Eine zentrale Erkenntnis formulieren",
+        "Code eingeben"
+      ],
+      "prompt": "Fasst eure biologischen Beobachtungen zusammen. Welche Erkenntnis war am wichtigsten?"
+    }
+  ],
+  "story": {
+    "title": "Der verschwundene Feldnotiz-Code",
+    "hook": "Eine Forschungsgruppe hat ihre Feldnotizen verschlüsselt. Die Codefragmente entstehen durch genaue biologische Beobachtungen.",
+    "finale": "Die Feldnotizen werden entschlüsselt und die wichtigsten Beobachtungen gesichert."
+  }
+}
