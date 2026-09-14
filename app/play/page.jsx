@@ -211,11 +211,20 @@ const missions = [
     prompt: "Your five code fragments are 1 – 1 – 2 – 3 – 5. Each number is the sum of the two numbers before it. Which number comes next?",
     options: ["6", "7", "8", "10"],
     correct: 2,
-    explanation: "The next number is 8 because 3 + 5 = 8. This is the Fibonacci sequence.",
+    explanation: "The next number is 8 because 3 + 5 = 8.",
     code: null,
     codeSlot: null
   }
 ];
+
+const confettiPieces = Array.from({ length: 70 }, (_, i) => ({
+  id: i,
+  left: `${(i * 37) % 100}%`,
+  delay: `${(i % 14) * 0.08}s`,
+  duration: `${2.7 + (i % 7) * 0.18}s`,
+  rotate: `${(i * 71) % 360}deg`,
+  shape: i % 3
+}));
 
 export default function PlayPage() {
   const [index, setIndex] = useState(0);
@@ -229,10 +238,15 @@ export default function PlayPage() {
 
   function choose(optionIndex) {
     if (answered) return;
+
     setSelected(optionIndex);
     setAnswered(true);
 
-    if (optionIndex === mission.correct && mission.code !== null && mission.codeSlot !== null) {
+    if (
+      optionIndex === mission.correct &&
+      mission.code !== null &&
+      mission.codeSlot !== null
+    ) {
       setCollected((prev) => {
         const next = [...prev];
         next[mission.codeSlot] = mission.code;
@@ -251,14 +265,143 @@ export default function PlayPage() {
       setFinished(true);
       return;
     }
+
     setIndex(index + 1);
     setSelected(null);
     setAnswered(false);
   }
 
+  function restart() {
+    setIndex(0);
+    setSelected(null);
+    setAnswered(false);
+    setCollected([null, null, null, null, null]);
+    setFinished(false);
+  }
+
   if (finished) {
     return (
       <>
+        <style jsx>{`
+          .confetti-layer {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 9999;
+          }
+
+          .confetti-piece {
+            position: absolute;
+            top: -40px;
+            width: 11px;
+            height: 18px;
+            border-radius: 2px;
+            animation-name: confettiFall;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+          }
+
+          .confetti-piece:nth-child(4n + 1) { background: #ffd54a; }
+          .confetti-piece:nth-child(4n + 2) { background: #ffffff; }
+          .confetti-piece:nth-child(4n + 3) { background: #e84b4b; }
+          .confetti-piece:nth-child(4n) { background: #4aa3ff; }
+
+          @keyframes confettiFall {
+            0% {
+              transform: translateY(-20px) rotate(0deg);
+              opacity: 1;
+            }
+            80% {
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(110vh) rotate(900deg);
+              opacity: 0;
+            }
+          }
+
+          .final-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 18px 60px;
+          }
+
+          .final-card {
+            text-align: center;
+            padding: 34px;
+          }
+
+          .final-kicker {
+            display: inline-block;
+            margin-bottom: 12px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            background: rgba(255, 213, 74, 0.14);
+            color: #ffd54a;
+          }
+
+          .final-sequence {
+            margin: 24px auto;
+            padding: 20px;
+            border-radius: 16px;
+            font-size: clamp(1.8rem, 6vw, 3rem);
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            background: rgba(255, 255, 255, 0.06);
+          }
+
+          .final-explanation {
+            max-width: 650px;
+            margin: 0 auto;
+            text-align: left;
+          }
+
+          .math-lines {
+            display: grid;
+            gap: 8px;
+            max-width: 320px;
+            margin: 22px auto;
+            font-size: 1.08rem;
+            font-weight: 800;
+          }
+
+          .final-note {
+            margin-top: 20px;
+            opacity: 0.86;
+          }
+
+          .final-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 28px;
+          }
+
+          .final-actions button {
+            min-width: 170px;
+          }
+        `}</style>
+
+        <div className="confetti-layer" aria-hidden="true">
+          {confettiPieces.map((piece) => (
+            <span
+              key={piece.id}
+              className="confetti-piece"
+              style={{
+                left: piece.left,
+                animationDelay: piece.delay,
+                animationDuration: piece.duration,
+                transform: `rotate(${piece.rotate})`
+              }}
+            />
+          ))}
+        </div>
+
         <header className="topbar">
           <div className="brand">
             <div className="logo">🏆</div>
@@ -269,14 +412,50 @@ export default function PlayPage() {
           </div>
         </header>
 
-        <main>
-          <div className="completion card">
+        <main className="final-wrap">
+          <section className="completion card final-card">
             <div className="completion-icon">✓</div>
-            <h2>London mission completed.</h2>
-            <p>You solved 12 London challenges, collected all five code fragments and discovered the Fibonacci pattern.</p>
-            <div className="score">FINAL ANSWER: 8</div>
-            <Link href="/"><button>Back to Start</button></Link>
-          </div>
+            <div className="final-kicker">MISSION COMPLETE</div>
+
+            <h2>You cracked the London Code! 🇬🇧</h2>
+
+            <p>
+              You solved all 12 London challenges and collected the secret number pattern.
+            </p>
+
+            <div className="final-sequence">
+              1 → 1 → 2 → 3 → 5 → 8
+            </div>
+
+            <div className="final-explanation">
+              <h3>What does the number sequence mean?</h3>
+
+              <p>
+                This is the <strong>Fibonacci sequence</strong>. Starting with 1 and 1,
+                every new number is created by adding the two numbers before it.
+              </p>
+
+              <div className="math-lines">
+                <div>1 + 1 = 2</div>
+                <div>1 + 2 = 3</div>
+                <div>2 + 3 = 5</div>
+                <div>3 + 5 = 8</div>
+              </div>
+
+              <p className="final-note">
+                Fibonacci patterns are famous in mathematics. Similar number relationships
+                can also appear when people describe patterns in nature, such as spirals
+                and the arrangement of leaves or seeds.
+              </p>
+            </div>
+
+            <div className="final-actions">
+              <button onClick={restart}>Play again</button>
+              <Link href="/">
+                <button className="secondary">Back to Start</button>
+              </Link>
+            </div>
+          </section>
         </main>
       </>
     );
@@ -296,7 +475,11 @@ export default function PlayPage() {
         <div className="progress-wrap">
           <span>{index + 1} / {missions.length}</span>
           <div className="progress">
-            <div style={{ width: `${((index + 1) / missions.length) * 100}%` }} />
+            <div
+              style={{
+                width: `${((index + 1) / missions.length) * 100}%`
+              }}
+            />
           </div>
         </div>
       </header>
@@ -307,7 +490,12 @@ export default function PlayPage() {
             <div className="side-title">MISSION ROUTE</div>
 
             {missions.map((m, i) => (
-              <div className={`route-item ${i === index ? "current" : ""} ${i < index ? "done" : ""}`} key={m.id}>
+              <div
+                className={`route-item ${i === index ? "current" : ""} ${
+                  i < index ? "done" : ""
+                }`}
+                key={m.id}
+              >
                 <span className="route-dot">{i < index ? "✓" : i + 1}</span>
                 <div>
                   <strong>{m.place}</strong>
@@ -317,9 +505,13 @@ export default function PlayPage() {
             ))}
 
             <div className="inventory-title">CODE FRAGMENTS</div>
+
             <div className="code-row">
               {collected.map((value, i) => (
-                <div className={`code-box ${value ? "filled" : ""}`} key={i}>
+                <div
+                  className={`code-box ${value ? "filled" : ""}`}
+                  key={i}
+                >
                   {value || "?"}
                 </div>
               ))}
@@ -345,12 +537,17 @@ export default function PlayPage() {
               <div className="answers">
                 {mission.options.map((option, i) => {
                   const isCorrect = answered && i === mission.correct;
-                  const isWrong = answered && selected === i && i !== mission.correct;
+                  const isWrong =
+                    answered && selected === i && i !== mission.correct;
 
                   return (
                     <button
                       key={option}
-                      className={`answer ${selected === i ? "selected" : ""} ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}`}
+                      className={`answer ${
+                        selected === i ? "selected" : ""
+                      } ${isCorrect ? "correct" : ""} ${
+                        isWrong ? "wrong" : ""
+                      }`}
                       onClick={() => choose(i)}
                     >
                       <span>{String.fromCharCode(65 + i)}</span>
@@ -361,8 +558,15 @@ export default function PlayPage() {
               </div>
 
               {answered && (
-                <div className={`feedback ${correctAnswer ? "good" : "retry"}`}>
-                  <strong>{correctAnswer ? "Correct." : "Not quite."}</strong>
+                <div
+                  className={`feedback ${
+                    correctAnswer ? "good" : "retry"
+                  }`}
+                >
+                  <strong>
+                    {correctAnswer ? "Correct." : "Not quite."}
+                  </strong>
+
                   <p>{mission.explanation}</p>
 
                   {correctAnswer && mission.code && (
@@ -381,7 +585,9 @@ export default function PlayPage() {
 
               {answered && correctAnswer && (
                 <button className="next-btn" onClick={next}>
-                  {index === missions.length - 1 ? "Complete London Mission" : "Next Mission"}
+                  {index === missions.length - 1
+                    ? "Complete London Mission"
+                    : "Next Mission"}
                 </button>
               )}
             </div>
