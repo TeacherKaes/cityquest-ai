@@ -1,8 +1,184 @@
-'use client';
-import { useEffect,useState } from "react";
+"use client";
+
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { getEdition } from "../../lib/editionRegistry";
-import { createSession,getLandmark,getNpc,getMission,getProgress,completeMission,moveMission,expectedCode,currentCode } from "../../lib/questEngine";
-function defaultSession(){const edition=getEdition("london");return createSession({edition,config:{teamName:"Demo Team",level:"A2/B1",duration:20}})}
-export default function PlayPage(){const[session,setSession]=useState(null);const[objectiveProgress,setObjectiveProgress]=useState(0);const[message,setMessage]=useState("");const[finalInput,setFinalInput]=useState("");const[final,setFinal]=useState(false);const[finished,setFinished]=useState(false);useEffect(()=>{const raw=localStorage.getItem("cityquest-alpha-session");setSession(raw?JSON.parse(raw):defaultSession())},[]);useEffect(()=>{if(session)localStorage.setItem("cityquest-alpha-session",JSON.stringify(session))},[session]);if(!session)return null;return <PlayInner session={session} setSession={setSession} objectiveProgress={objectiveProgress} setObjectiveProgress={setObjectiveProgress} message={message} setMessage={setMessage} finalInput={finalInput} setFinalInput={setFinalInput} final={final} setFinal={setFinal} finished={finished} setFinished={setFinished}/> }
-export function PlayInner({session,setSession,objectiveProgress,setObjectiveProgress,message,setMessage,finalInput,setFinalInput,final,setFinal,finished,setFinished}){const edition=getEdition(session.editionId);const mission=getMission(edition,session.currentMission);const landmark=getLandmark(edition,mission.landmark);const npc=getNpc(edition,mission.npc);const progress=getProgress(edition,session);const chat=session.chat[session.currentMission]||[{role:"ai",name:`${npc.emoji} ${npc.name}`,text:intro(mission)}];async function persist(next){setSession(next);if(session.remoteId){await fetch(`/api/sessions/${session.remoteId}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({session:next})})}}function selectMission(index){setObjectiveProgress(0);persist(moveMission(edition,session,index))}function markObjective(){if(objectiveProgress<mission.objectives.length-1)setObjectiveProgress(objectiveProgress+1);else{setObjectiveProgress(mission.objectives.length);persist(completeMission(edition,session))}}async function send(){if(!message.trim())return;const user={role:"user",name:"Student",text:message.trim()};setMessage("");const res=await fetch("/api/cityquest/message",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({editionId:edition.id,missionIndex:session.currentMission,message:user.text})});const data=await res.json();const ai={role:"ai",name:`${npc.emoji} ${npc.name}`,text:data.reply};persist({...session,chat:{...session.chat,[session.currentMission]:[...chat,user,ai]}})}if(finished)return <><Top session={session} edition={edition} progress={100}/><main><div className="certificate"><h2>Certificate</h2><h3>{session.teamName}</h3><p>completed {edition.story.title}.</p><p>Communication · Teamwork · English</p><button onClick={()=>window.print()}>Print Certificate</button></div><div className="card" style={{marginTop:18}}><h3>Reflection</h3><p>Which conversation helped you most?</p><p>What was difficult?</p><p>Which English expression will you remember?</p></div></main></>;if(final)return <><Top session={session} edition={edition} progress={progress}/><main><div className="card" style={{textAlign:"center"}}><h2>🔐 Final Safe</h2><p>Enter the collected code fragments.</p><div className="safe">{currentCode(edition,session)}</div><input value={finalInput} onChange={e=>setFinalInput(e.target.value)} placeholder={`Prototype code: ${expectedCode(edition)}`} style={{maxWidth:320,textAlign:"center",margin:"auto",display:"block"}}/><div className="actions" style={{justifyContent:"center"}}><button onClick={()=>finalInput===expectedCode(edition)?setFinished(true):alert("Code stimmt noch nicht.")}>Open Safe</button><button className="ghost" onClick={()=>setFinal(false)}>Back</button></div></div></main></>;return <><Top session={session} edition={edition} progress={progress}/><main><div className="layout"><aside className="card"><h3>📍 Route</h3>{edition.missions.map((m,i)=>{const lm=getLandmark(edition,m.landmark);return <div key={m.id} className={`nav-item ${i===session.currentMission?"active":""}`} onClick={()=>selectMission(i)}><div className="nav-ico">{lm.emoji}</div><div><b>{lm.name}</b><br/><span style={{color:"var(--muted)",fontSize:12}}>{m.family} · {session.completed[i]?"completed":"open"}</span></div></div>})}<h3>🎒 Inventory</h3><div className="inventory">{edition.missions.filter(m=>m.reward).map((m,i)=><div key={m.id} className={`item ${session.inventory[i]?"":"empty"}`}>{session.inventory[i]?<>🔢<br/>{session.inventory[i]}</>:"?"}</div>)}</div></aside><section><div className="card"><div className="quest-title"><div><span className="tag gold">{mission.family}</span><h2 style={{fontSize:30,margin:"10px 0"}}>{mission.title}</h2></div><span className="tag green">{session.level}</span></div><p><strong>{landmark.emoji} {landmark.name}:</strong> {mission.prompt}</p><div className="objectives">{mission.objectives.map((o,i)=><div key={o} className={`obj ${session.completed[session.currentMission]||i<objectiveProgress?"done":""}`}><div className="check">{session.completed[session.currentMission]||i<objectiveProgress?"✓":""}</div><div>{o}</div></div>)}</div><div className="actions"><button onClick={markObjective}>Objective erledigt</button><button className="secondary" onClick={()=>alert("Hint: Talk to your partner first. Then ask one clear question in English.")}>Hint</button><button className="ghost" onClick={()=>selectMission(Math.min(session.currentMission+1,edition.missions.length-1))}>Skip / Next</button></div></div><div className="card" style={{marginTop:18}}><h3>💬 NPC Chat</h3><div className="chat">{chat.map((m,i)=><div key={i} className={`msg ${m.role==="user"?"user":"ai"}`}><div className="avatar">{m.role==="user"?"🧑":m.name.split(" ")[0]}</div><div className="bubble"><b>{m.role==="user"?"":m.name}</b>{m.role==="user"?null:<br/>}{m.text}</div></div>)}</div><div className="chat-input"><input value={message} onChange={e=>setMessage(e.target.value)} onKeyDown={e=>{if(e.key==="Enter")send()}} placeholder="Type in English..."/><button onClick={send}>Send</button></div></div></section><aside className="card"><h3>🗺️ Quest Map</h3><div className="mapbox"><svg viewBox="0 0 1000 580" preserveAspectRatio="none"><rect width="1000" height="580" fill="#d9cfb8"/><path d="M-40,350 C130,270 220,310 330,365 C450,428 545,388 650,322 C760,252 850,292 1040,365 L1040,480 C900,430 770,405 665,460 C540,520 420,493 306,430 C190,365 80,390 -40,470 Z" fill="#5f9bb4" opacity=".86"/></svg>{edition.missions.map((m,i)=>{const lm=getLandmark(edition,m.landmark);return <div key={m.id} className={`pin ${i===session.currentMission?"current":""} ${session.completed[i]?"done":""}`} style={{left:`${lm.x}%`,top:`${lm.y}%`}} onClick={()=>selectMission(i)}><div className="pin-dot"></div><div className="pin-label">{lm.name.split(" ")[0]}</div></div>})}</div><p className="pill">Progress: <strong>{progress}%</strong></p><button className="ok" onClick={()=>setFinal(true)}>Final Safe</button></aside></div></main></>}function Top({session,edition,progress}){return <header className="topbar"><div className="brand"><div className="logo">🗺️</div><div><h1>CityQuest AI</h1><span>{edition.title} · {edition.story.title}</span></div></div><div className="pill">Team: <strong>{session.teamName}</strong> · Progress <strong>{progress}%</strong></div><Link href="/teacher"><button className="ghost">Teacher</button></Link></header>}function intro(mission){if(mission.family==="FIN")return"Welcome. Before you open the locker, explain your final code.";if(mission.family==="NAV")return"I can help with directions. Which route are you thinking about?";if(mission.family==="OBS")return"Look carefully. What do you notice first?";if(mission.family==="LIFE")return"Good afternoon. What kind of recommendation are you looking for?";return"Hello! What would you like to ask me?"}
+
+const missions = [
+  {
+    id: 1,
+    place: "Trafalgar Square",
+    tag: "OBSERVATION",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Trafalgar%20Square%202026-04-25.jpg",
+    credit: "Wikimedia Commons – Trafalgar Square 2026-04-25",
+    prompt: "Look carefully at the photograph. Which feature is the clearest sign that this is Trafalgar Square?",
+    options: ["A large Ferris wheel beside the road","Nelson's Column rising above the square","A drawbridge across the Thames","A royal balcony with guards"],
+    correct: 1,
+    explanation: "Nelson's Column is the dominant landmark in Trafalgar Square and one of its most recognisable features.",
+    code: "4"
+  },
+  {
+    id: 2,
+    place: "Buckingham Palace",
+    tag: "VISUAL CLUE",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Buckingham%20Palace%20east%20front.jpg",
+    credit: "Wikimedia Commons – Buckingham Palace east front",
+    prompt: "Which visual clue best supports the idea that this building has a ceremonial royal function?",
+    options: ["The symmetrical palace façade and formal forecourt","A large advertising screen above the entrance","Rows of market stalls at the gate","A railway platform directly outside"],
+    correct: 0,
+    explanation: "The formal façade, forecourt and ceremonial setting are strong clues that this is an important state and royal building.",
+    code: "8"
+  },
+  {
+    id: 3,
+    place: "Westminster",
+    tag: "FACT CHECK",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Big%20Ben%20from%20the%20Westminster%20Bridge.jpg",
+    credit: "Wikimedia Commons – Big Ben from Westminster Bridge",
+    prompt: "People often call the whole tower 'Big Ben'. What does the name Big Ben originally refer to?",
+    options: ["The Great Bell inside the clock tower","The whole Palace of Westminster","Westminster Bridge","The clock face only"],
+    correct: 0,
+    explanation: "Big Ben originally refers to the Great Bell. The tower is officially called the Elizabeth Tower.",
+    code: "2"
+  },
+  {
+    id: 4,
+    place: "Covent Garden",
+    tag: "CITY LIFE",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Covent%20Garden%20London.jpg",
+    credit: "Wikimedia Commons – Covent Garden London",
+    prompt: "Imagine you are planning to spend 30 minutes here. Which activity fits Covent Garden best?",
+    options: ["Watch street performers and explore the market area","Take a ferry to France","Visit the Crown Jewels inside the market hall","Board a long-distance train to Edinburgh"],
+    correct: 0,
+    explanation: "Covent Garden is especially known for its market atmosphere, shops, cafés and street performers.",
+    code: "9"
+  },
+  {
+    id: 5,
+    place: "Tower Bridge",
+    tag: "ENGINEERING",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Tower%20Bridge%2C%20London%20England%20United%20Kingdom.jpg",
+    credit: "Wikimedia Commons – Tower Bridge, London",
+    prompt: "Why can Tower Bridge allow tall ships to pass?",
+    options: ["The whole bridge slides sideways","Its central road sections can lift upwards","Ships pass through an underground tunnel","The towers move apart"],
+    correct: 1,
+    explanation: "Tower Bridge is a bascule bridge: the two central sections can raise to let tall vessels pass.",
+    code: "1"
+  },
+  {
+    id: 6,
+    place: "Final Checkpoint",
+    tag: "FINAL",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Tower%20Bridge%20spanning%20the%20River%20Thames%20in%20London%20under%20a%20clear%20blue%20sky.jpg",
+    credit: "Wikimedia Commons – London reference image",
+    prompt: "Enter the five code digits you collected in mission order.",
+    options: [],
+    correct: null,
+    explanation: "",
+    code: ""
+  }
+];
+
+export default function PlayPage() {
+  const [index, setIndex] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [answered, setAnswered] = useState(false);
+  const [collected, setCollected] = useState([]);
+  const [finalCode, setFinalCode] = useState("");
+  const [finished, setFinished] = useState(false);
+
+  const mission = missions[index];
+  const expected = useMemo(() => missions.slice(0, 5).map(m => m.code).join(""), []);
+
+  function choose(optionIndex) {
+    if (answered) return;
+    setSelected(optionIndex);
+    setAnswered(true);
+    if (optionIndex === mission.correct) {
+      setCollected(prev => prev.includes(mission.code) ? prev : [...prev, mission.code]);
+    }
+  }
+
+  function next() {
+    if (index < missions.length - 1) {
+      setIndex(index + 1);
+      setSelected(null);
+      setAnswered(false);
+    }
+  }
+
+  if (finished) {
+    return (
+      <>
+        <header className="topbar"><div className="brand"><div className="logo">🏆</div><div><h1>Mission Complete</h1><span>CityQuest London</span></div></div></header>
+        <main><div className="completion card"><div className="completion-icon">✓</div><h2>Case solved.</h2><p>You completed the London visual challenge and reconstructed the final code.</p><div className="score">5 / 5 clues collected</div><Link href="/"><button>Back to Start</button></Link></div></main>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <header className="topbar">
+        <div className="brand"><div className="logo">🇬🇧</div><div><h1>CityQuest London</h1><span>{mission.place}</span></div></div>
+        <div className="progress-wrap"><span>{index + 1} / {missions.length}</span><div className="progress"><div style={{width: `${((index + 1) / missions.length) * 100}%`}} /></div></div>
+      </header>
+
+      <main>
+        <section className="game-grid">
+          <aside className="card side-panel">
+            <div className="side-title">MISSION ROUTE</div>
+            {missions.map((m, i) => (
+              <div className={`route-item ${i === index ? "current" : ""} ${i < index ? "done" : ""}`} key={m.id}>
+                <span className="route-dot">{i < index ? "✓" : i + 1}</span>
+                <div><strong>{m.place}</strong><small>{m.tag}</small></div>
+              </div>
+            ))}
+            <div className="inventory-title">CODE FRAGMENTS</div>
+            <div className="code-row">
+              {[0,1,2,3,4].map(i => <div className={`code-box ${collected[i] ? "filled" : ""}`} key={i}>{collected[i] || "?"}</div>)}
+            </div>
+          </aside>
+
+          <section className="card mission-card">
+            <div className="mission-meta"><span className="tag gold">{mission.tag}</span><span className="mission-number">MISSION {mission.id}</span></div>
+            <h2>{mission.place}</h2>
+            <figure className="photo-frame"><img src={mission.image} alt={mission.place} /><figcaption>{mission.credit}</figcaption></figure>
+
+            <div className="question-box">
+              <h3>{mission.prompt}</h3>
+
+              {mission.id < 6 ? (
+                <div className="answers">
+                  {mission.options.map((option, i) => {
+                    const isCorrect = answered && i === mission.correct;
+                    const isWrong = answered && selected === i && i !== mission.correct;
+                    return (
+                      <button key={option} className={`answer ${selected === i ? "selected" : ""} ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}`} onClick={() => choose(i)}>
+                        <span>{String.fromCharCode(65 + i)}</span>{option}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="final-box">
+                  <input value={finalCode} onChange={e => setFinalCode(e.target.value)} placeholder="Enter 5-digit code" maxLength={5} />
+                  <button onClick={() => finalCode.trim() === expected ? setFinished(true) : null}>Unlock Case</button>
+                  {finalCode.length === 5 && finalCode !== expected && <p className="final-error">That code does not fit the clues. Check your fragments.</p>}
+                </div>
+              )}
+
+              {answered && (
+                <div className={`feedback ${selected === mission.correct ? "good" : "retry"}`}>
+                  <strong>{selected === mission.correct ? "Correct." : "Not quite."}</strong>
+                  <p>{mission.explanation}</p>
+                  {selected === mission.correct ? <div className="fragment">CODE FRAGMENT: <b>{mission.code}</b></div> : <button className="secondary" onClick={() => {setSelected(null); setAnswered(false);}}>Try again</button>}
+                </div>
+              )}
+
+              {answered && selected === mission.correct && <button className="next-btn" onClick={next}>{index === 4 ? "Go to Final Checkpoint" : "Next Mission"}</button>}
+            </div>
+          </section>
+        </section>
+      </main>
+    </>
+  );
+}
