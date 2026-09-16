@@ -1,225 +1,227 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 
 const aufgaben = [
   {
     ort: "Experimentiertisch",
-    typ: "BEOBACHTEN UND DEUTEN",
-    hinweis:
-      "Ein blanker Eisennagel liegt einige Minuten in einer blauen Kupfersulfatlösung. Danach ist auf Teilen des Nagels ein rötlich-brauner Feststoff zu erkennen. Die Lösung verändert sich ebenfalls.",
-    schema: "Eisennagel  +  Kupfersulfatlösung  →  ?",
-    frage:
-      "Welche Aussage deutet die Beobachtung fachlich am besten?",
+    typ: "BEOBACHTUNG",
+    hinweis: "Ein blanker Eisennagel wird in eine blaue Kupfersulfatlösung gestellt. Nach einigen Minuten ist auf dem Nagel ein rötlich-brauner Belag zu sehen.",
+    schema: "Eisennagel + blaue Kupfersulfatlösung",
+    frage: "Welche Beobachtung spricht am deutlichsten dafür, dass eine chemische Reaktion stattgefunden hat?",
     antworten: [
-      "Der Eisennagel wurde nur von der blauen Lösung eingefärbt.",
-      "Kupfersulfat verdampft und schlägt sich anschließend auf dem Nagel nieder.",
-      "Es sind neue Stoffe entstanden; der rötlich-braune Feststoff ist ein Reaktionsprodukt.",
-      "Der Nagel hat lediglich Kupfersulfatlösung aufgesaugt."
+      "Der Nagel liegt im Becherglas.",
+      "Auf dem Nagel entsteht ein rötlich-brauner Belag.",
+      "Die Lösung ist flüssig.",
+      "Der Nagel besteht weiterhin aus Metall."
     ],
-    richtig: 2,
-    erklaerung:
-      "Die Bildung eines neuen Feststoffs mit anderen Eigenschaften ist ein Hinweis auf eine chemische Reaktion. Der rötlich-braune Feststoff ist Kupfer.",
+    richtig: 1,
+    tipp: "Achte auf eine Veränderung, bei der etwas mit neuen Eigenschaften entsteht.",
+    erklaerung: "Der rötlich-braune Belag ist neu entstandenes Kupfer. Die Bildung eines neuen Stoffes ist ein Kennzeichen einer chemischen Reaktion.",
     fragment: null
   },
   {
     ort: "Teilchenschrank",
-    typ: "ATOM UND ION",
-    hinweis:
-      "Im Fachraum findest du zwei Teilchenkarten: Ein Eisenatom besitzt 26 Protonen und 26 Elektronen. Eine zweite Karte zeigt ein Eisenteilchen mit 26 Protonen und 24 Elektronen.",
-    schema: "26 p⁺ / 26 e⁻     →     26 p⁺ / 24 e⁻",
-    frage:
-      "Welche Bezeichnung und Ladung passen zum zweiten Teilchen?",
+    typ: "ATOM ODER ION?",
+    hinweis: "Ein Eisenatom ist elektrisch neutral. Bei der Reaktion entstehen aus Eisen jedoch positiv geladene Eisenteilchen.",
+    schema: "Fe-Atom  →  positiv geladenes Eisen-Ion",
+    frage: "Was muss mit Elektronen geschehen, damit aus einem neutralen Eisenatom ein positiv geladenes Ion wird?",
     antworten: [
-      "Fe²⁻, weil zwei Elektronen fehlen.",
-      "Fe²⁺, weil zwei Elektronen fehlen.",
-      "Fe²⁺, weil zwei Protonen hinzugekommen sind.",
-      "Fe, weil die Protonenzahl unverändert bleibt."
+      "Das Atom muss Elektronen abgeben.",
+      "Das Atom muss Elektronen aufnehmen.",
+      "Das Atom muss Protonen abgeben.",
+      "Es darf sich gar nichts verändern."
     ],
-    richtig: 1,
-    erklaerung:
-      "Das Teilchen besitzt zwei Elektronen weniger als das neutrale Atom. Dadurch überwiegen zwei positive Ladungen: Fe²⁺.",
+    richtig: 0,
+    tipp: "Elektronen sind negativ geladen. Überlege, was passieren muss, damit ein Teilchen insgesamt positiver wird.",
+    erklaerung: "Gibt ein neutrales Atom negativ geladene Elektronen ab, bleibt ein positiv geladenes Ion zurück.",
     fragment: "Fe"
   },
   {
     ort: "Blaue Lösung",
-    typ: "TEILCHENEBENE",
-    hinweis:
-      "Vor dem Versuch ist die Lösung deutlich blau. Während der Reaktion wird die blaue Färbung schwächer. Kupfersulfatlösung enthält unter anderem Cu²⁺-Ionen.",
-    schema: "blaue Lösung: viele Cu²⁺   →   Färbung nimmt ab",
-    frage:
-      "Welche Deutung passt am besten zur abnehmenden blauen Färbung?",
+    typ: "KUPFER-IONEN",
+    hinweis: "Die blaue Farbe der Lösung wird durch Kupfer-Ionen verursacht. Während des Versuchs bildet sich auf dem Nagel metallisches Kupfer.",
+    schema: "Kupfer-Ionen in Lösung  →  Kupfer auf dem Nagel",
+    frage: "Welche Aussage beschreibt die Veränderung der Kupferteilchen am besten?",
     antworten: [
-      "Die Zahl der Cu²⁺-Ionen in der Lösung nimmt ab.",
-      "Cu²⁺-Ionen werden zu SO₄²⁻-Ionen.",
-      "Immer mehr Eisenatome gelangen unverändert in die Lösung.",
-      "Die Elektronen der Lösung werden blau und verlassen anschließend das Becherglas."
+      "Kupferatome werden zu Eisen-Ionen.",
+      "Kupfer-Ionen verschwinden ohne einen neuen Stoff zu bilden.",
+      "Kupfer-Ionen werden zu neutralen Kupferatomen.",
+      "Kupfer-Ionen werden zu Sulfat-Ionen."
     ],
-    richtig: 0,
-    erklaerung:
-      "Cu²⁺-Ionen werden während der Reaktion verbraucht und zu Kupferatomen. Dadurch kann die für Cu²⁺ typische blaue Färbung schwächer werden.",
+    richtig: 2,
+    tipp: "Der Belag auf dem Nagel besteht aus elementarem, also ungeladenem Kupfer.",
+    erklaerung: "Aus den geladenen Kupfer-Ionen entstehen neutrale Kupferatome. Diese bilden den sichtbaren Kupferbelag.",
     fragment: null
   },
   {
     ort: "Elektronenschloss",
-    typ: "TEILGLEICHUNG",
-    hinweis:
-      "An der Oberfläche des Eisennagels entstehen Fe²⁺-Ionen. Die Protonenzahl des Eisens bleibt dabei unverändert.",
-    schema: "Fe  →  Fe²⁺",
-    frage:
-      "Welche Teilgleichung beschreibt diesen Vorgang korrekt und gleicht zugleich die Ladungen aus?",
+    typ: "OXIDATION",
+    hinweis: "Beim Versuch werden aus neutralen Eisenatomen positiv geladene Eisen-Ionen.",
+    schema: "Eisenatom  →  Eisen-Ion + Elektronen",
+    frage: "Wie nennt man einen Vorgang, bei dem ein Teilchen Elektronen abgibt?",
     antworten: [
-      "Fe + 2 e⁻ → Fe²⁺",
-      "Fe → Fe²⁺ + 2 p⁺",
-      "Fe → Fe²⁺ + 2 e⁻",
-      "Fe²⁺ → Fe + 2 e⁻"
-    ],
-    richtig: 2,
-    erklaerung:
-      "Beim Übergang vom neutralen Fe-Atom zum Fe²⁺-Ion müssen zwei Elektronen abgegeben werden: Fe → Fe²⁺ + 2 e⁻.",
-    fragment: "S"
-  },
-  {
-    ort: "Oxidationskammer",
-    typ: "REDOX-BEGRIFF",
-    hinweis:
-      "Du hast für Eisen die Teilgleichung Fe → Fe²⁺ + 2 e⁻ entschlüsselt. Entscheidend ist nun nicht der Stoffname, sondern die Veränderung der Elektronen.",
-    schema: "Fe  →  Fe²⁺ + 2 e⁻",
-    frage:
-      "Welche Aussage über Eisen ist daraus ableitbar?",
-    antworten: [
-      "Eisen wird reduziert, weil seine Ladung positiver wird.",
-      "Eisen wird oxidiert, weil es Elektronen abgibt.",
-      "Eisen wird reduziert, weil es Elektronen abgibt.",
-      "Eisen wird oxidiert, weil es Elektronen aufnimmt."
+      "Reduktion",
+      "Oxidation",
+      "Neutralisation",
+      "Lösen"
     ],
     richtig: 1,
-    erklaerung:
-      "Elektronenabgabe ist Oxidation. Eisen ist hier der Elektronendonator und wird zu Fe²⁺ oxidiert.",
-    fragment: "O"
+    tipp: "Merksatz: Oxidation und Reduktion unterscheiden sich durch Abgabe oder Aufnahme von Elektronen.",
+    erklaerung: "Die Abgabe von Elektronen bezeichnet man als Oxidation. Das Eisen wird bei diesem Versuch oxidiert.",
+    fragment: "S"
   },
   {
     ort: "Kupferschloss",
     typ: "REDUKTION",
-    hinweis:
-      "Auf dem Nagel entsteht elementares Kupfer. Vor der Reaktion befindet sich Kupfer jedoch als Cu²⁺ in der Lösung.",
-    schema: "Cu²⁺  →  Cu",
-    frage:
-      "Welche Teilgleichung erklärt die Entstehung des Kupfers korrekt?",
+    hinweis: "Aus positiv geladenen Kupfer-Ionen entstehen neutrale Kupferatome, die sich auf dem Nagel abscheiden.",
+    schema: "Kupfer-Ion + Elektronen  →  Kupferatom",
+    frage: "Was geschieht mit den Kupfer-Ionen?",
     antworten: [
-      "Cu → Cu²⁺ + 2 e⁻",
-      "Cu²⁺ → Cu + 2 e⁻",
-      "Cu²⁺ + 2 p⁺ → Cu",
-      "Cu²⁺ + 2 e⁻ → Cu"
+      "Sie nehmen Elektronen auf und werden reduziert.",
+      "Sie geben Elektronen ab und werden reduziert.",
+      "Sie nehmen Elektronen auf und werden oxidiert.",
+      "Sie geben Protonen ab und werden oxidiert."
     ],
-    richtig: 3,
-    erklaerung:
-      "Cu²⁺ muss zwei Elektronen aufnehmen, damit neutrales Kupfer entsteht. Elektronenaufnahme ist Reduktion.",
-    fragment: null
+    richtig: 0,
+    tipp: "Ein positives Ion benötigt negative Ladung, um wieder neutral zu werden.",
+    erklaerung: "Die Kupfer-Ionen nehmen Elektronen auf. Elektronenaufnahme bezeichnet man als Reduktion.",
+    fragment: "O"
   },
   {
     ort: "Redox-Tür",
     typ: "ELEKTRONENÜBERTRAGUNG",
-    hinweis:
-      "Zwei Teilgleichungen wurden gefunden:\nFe → Fe²⁺ + 2 e⁻\nCu²⁺ + 2 e⁻ → Cu",
-    schema: "Fe  |  e⁻-Übertragung  |  Cu²⁺",
-    frage:
-      "Welche Aussage beschreibt die Rollen der Reaktionspartner korrekt?",
+    hinweis: "Eisen gibt Elektronen ab. Kupfer-Ionen nehmen Elektronen auf. Beide Vorgänge laufen gleichzeitig ab.",
+    schema: "Eisen  →  Elektronen  →  Kupfer-Ionen",
+    frage: "Warum bezeichnet man die Gesamtreaktion als Redoxreaktion?",
     antworten: [
-      "Fe nimmt Elektronen auf; Cu²⁺ gibt Elektronen ab.",
-      "Fe und Cu²⁺ geben beide Elektronen ab.",
-      "Fe gibt Elektronen ab; Cu²⁺ nimmt Elektronen auf.",
-      "SO₄²⁻ überträgt die Elektronen von Cu auf Fe."
+      "Weil dabei immer Sauerstoff entstehen muss.",
+      "Weil nur die Kupfer-Ionen reagieren.",
+      "Weil Oxidation und Reduktion miteinander gekoppelt sind.",
+      "Weil jede Reaktion mit einem Metall eine Redoxreaktion ist."
     ],
     richtig: 2,
-    erklaerung:
-      "Die vom Eisen abgegebenen Elektronen werden von Cu²⁺ aufgenommen. Oxidation und Reduktion sind deshalb miteinander gekoppelt.",
+    tipp: "Betrachte beide Reaktionspartner: Einer gibt Elektronen ab, der andere nimmt genau diese Elektronen auf.",
+    erklaerung: "Oxidation und Reduktion laufen gekoppelt ab. Die Elektronen werden vom Eisen auf die Kupfer-Ionen übertragen.",
     fragment: null
   },
   {
-    ort: "Ionen-Tresor",
-    typ: "FORMELBILDUNG",
-    hinweis:
-      "Nach der Elektronenübertragung befinden sich Fe²⁺-Ionen in einer Lösung, in der weiterhin SO₄²⁻-Ionen vorhanden sind. Eine Salzformel muss insgesamt elektrisch neutral sein.",
-    schema: "Fe²⁺  +  SO₄²⁻  →  Salz",
-    frage:
-      "Welche Verhältnisformel ergibt sich aus den Ionenladungen?",
+    ort: "Sulfat-Regal",
+    typ: "IONEN IN DER LÖSUNG",
+    hinweis: "Kupfersulfatlösung enthält Kupfer-Ionen und Sulfat-Ionen. Die Kupfer-Ionen werden zu Kupfer. Die Sulfat-Ionen bleiben in der Lösung.",
+    schema: "vorher: Kupfer-Ionen + Sulfat-Ionen\nnachher: Eisen-Ionen + Sulfat-Ionen",
+    frage: "Welche Rolle spielen die Sulfat-Ionen bei der Elektronenübertragung?",
     antworten: [
-      "Fe₂SO₄",
-      "Fe(SO₄)₂",
-      "Fe₂(SO₄)₃",
-      "FeSO₄"
+      "Sie werden zu Kupferatomen.",
+      "Sie geben die Elektronen an das Eisen ab.",
+      "Sie werden zu Eisenatomen.",
+      "Sie bleiben dabei unverändert in der Lösung."
     ],
     richtig: 3,
-    erklaerung:
-      "Eine Fe²⁺-Ladung (+2) und eine SO₄²⁻-Ladung (−2) gleichen sich im Verhältnis 1:1 aus. Daher lautet die Formel FeSO₄.",
+    tipp: "Vergleiche den Zustand vor und nach der Reaktion. Welches Teilchen taucht auf beiden Seiten unverändert auf?",
+    erklaerung: "Die Sulfat-Ionen sind weiterhin in der Lösung vorhanden. An der eigentlichen Elektronenübertragung sind sie nicht beteiligt.",
     fragment: "4"
   },
   {
-    ort: "Reaktionsarchiv",
-    typ: "NETTO-IONENGLEICHUNG",
-    hinweis:
-      "Das Sulfat-Ion ist vor und nach der Reaktion in der Lösung vorhanden. Für die eigentliche Elektronenübertragung kann es deshalb aus der Betrachtung herausgekürzt werden.",
-    schema: "Fe + Cu²⁺ + SO₄²⁻  →  Fe²⁺ + SO₄²⁻ + Cu",
-    frage:
-      "Welche Gleichung zeigt nur die Teilchen, die sich bei der Redoxreaktion tatsächlich verändern?",
+    ort: "Salz-Tresor",
+    typ: "REAKTIONSPRODUKT",
+    hinweis: "Nach der Reaktion befinden sich Eisen-Ionen zusammen mit Sulfat-Ionen in der Lösung. Gesucht ist der Name des dabei vorliegenden Salzes.",
+    schema: "Eisen-Ionen + Sulfat-Ionen  →  ?",
+    frage: "Welcher Stoff befindet sich nach der Reaktion neben dem entstandenen Kupfer in der Lösung?",
     antworten: [
-      "Fe + Cu²⁺ → Fe²⁺ + Cu",
-      "Fe + SO₄²⁻ → FeSO₄",
-      "Cu²⁺ + SO₄²⁻ → CuSO₄",
-      "Fe²⁺ + Cu → Fe + Cu²⁺"
+      "Kupferoxid",
+      "Eisen(II)-sulfat",
+      "Eisenoxid",
+      "Schwefelsäure"
     ],
-    richtig: 0,
-    erklaerung:
-      "SO₄²⁻ bleibt unverändert. Die eigentliche Redoxreaktion lässt sich daher als Fe + Cu²⁺ → Fe²⁺ + Cu darstellen.",
+    richtig: 1,
+    tipp: "Der Name eines Salzes setzt sich hier aus dem Metall-Ion und dem Sulfat-Ion zusammen.",
+    erklaerung: "Eisen-Ionen und Sulfat-Ionen bilden Eisen(II)-sulfat. Seine Formel lautet FeSO₄.",
+    fragment: null
+  },
+  {
+    ort: "Produktkammer",
+    typ: "STOFFEBENE",
+    hinweis: "Am Ende des Versuchs findest du einen rötlich-braunen Feststoff auf dem Nagel und eine Lösung, die nun Eisen-Ionen und Sulfat-Ionen enthält.",
+    schema: "Ausgangsstoffe  →  zwei neue Produkte",
+    frage: "Welche beiden Stoffe sind die Produkte der Reaktion?",
+    antworten: [
+      "Eisen und Kupfersulfat",
+      "Kupferoxid und Eisen",
+      "Eisen(II)-sulfat und Kupfer",
+      "Kupfersulfat und Schwefel"
+    ],
+    richtig: 2,
+    tipp: "Ein Produkt ist der sichtbare rötlich-braune Belag. Das andere Produkt ist das Salz aus Eisen-Ionen und Sulfat-Ionen.",
+    erklaerung: "Es entstehen Eisen(II)-sulfat und elementares Kupfer.",
     fragment: "Cu"
   },
   {
     ort: "Ausgangstür",
-    typ: "FINALE REAKTIONSGLEICHUNG",
-    hinweis:
-      "Du hast herausgefunden: Eisen wird zu Fe²⁺, Cu²⁺ wird zu Cu und SO₄²⁻ bleibt als Gegenion in der Lösung. Setze diese Informationen zur Stoffgleichung zusammen.",
-    schema: "Fe + CuSO₄  →  ?",
-    frage:
-      "Welche Produktseite öffnet die Ausgangstür?",
+    typ: "FINALES SCHLOSS",
+    hinweis: "Du hast alle Informationen gesammelt. Der Türcode besteht nicht aus Ziffern, sondern aus den chemischen Formeln der beiden Reaktionsprodukte.",
+    schema: "Eisennagel + Kupfersulfatlösung  →  PRODUKTCODE",
+    frage: "Welcher Produktcode öffnet die Tür?",
     antworten: [
-      "Fe₂(SO₄)₃ + Cu",
-      "FeCu + SO₄",
-      "Cu + FeSO₄",
-      "FeO + CuSO₃"
+      "Fe + CuSO₄",
+      "CuSO₄ + Fe",
+      "FeO + Cu",
+      "FeSO₄ + Cu"
     ],
-    richtig: 2,
-    erklaerung:
-      "Die Produkte sind Eisen(II)-sulfat und Kupfer. Die vollständige Reaktionsgleichung lautet: Fe + CuSO₄ → FeSO₄ + Cu.",
+    richtig: 3,
+    tipp: "Gesucht sind die Produkte – nicht die Ausgangsstoffe. Denke an Eisen(II)-sulfat und den rötlich-braunen Metallbelag.",
+    erklaerung: "Richtig! Die Produkte sind Eisen(II)-sulfat und Kupfer: FeSO₄ + Cu.",
     fragment: null
   }
 ];
 
+const naegel = Array.from({ length: 55 }, (_, i) => ({
+  id: i,
+  links: `${(i * 41) % 100}%`,
+  verz: `${(i % 11) * 0.12}s`,
+  dauer: `${2.6 + (i % 6) * 0.22}s`,
+  drehung: `${(i * 67) % 360}deg`
+}));
+
 export default function ChemieEscape() {
   const [index, setIndex] = useState(0);
   const [auswahl, setAuswahl] = useState(null);
-  const [beantwortet, setBeantwortet] = useState(false);
+  const [ausgeschlossen, setAusgeschlossen] = useState([]);
+  const [tipp, setTipp] = useState(false);
+  const [korrekt, setKorrekt] = useState(false);
   const [fragmente, setFragmente] = useState([]);
   const [fertig, setFertig] = useState(false);
 
   const a = aufgaben[index];
-  const korrekt = auswahl === a.richtig;
 
-  function waehlen(n) {
-    if (beantwortet) return;
-    setAuswahl(n);
-    setBeantwortet(true);
-    if (n === a.richtig && a.fragment) {
-      setFragmente((alt) =>
-        alt.includes(a.fragment) ? alt : [...alt, a.fragment]
+  const sichtbareAntworten = useMemo(
+    () =>
+      a.antworten
+        .map((text, originalIndex) => ({ text, originalIndex }))
+        .filter((x) => !ausgeschlossen.includes(x.originalIndex)),
+    [a, ausgeschlossen]
+  );
+
+  function waehlen(originalIndex) {
+    if (korrekt) return;
+    setAuswahl(originalIndex);
+
+    if (originalIndex === a.richtig) {
+      setKorrekt(true);
+      setTipp(false);
+      if (a.fragment) {
+        setFragmente((alt) =>
+          alt.includes(a.fragment) ? alt : [...alt, a.fragment]
+        );
+      }
+    } else {
+      setAusgeschlossen((alt) =>
+        alt.includes(originalIndex) ? alt : [...alt, originalIndex]
       );
+      setTipp(true);
+      setAuswahl(null);
     }
-  }
-
-  function erneut() {
-    setAuswahl(null);
-    setBeantwortet(false);
   }
 
   function weiter() {
@@ -229,13 +231,17 @@ export default function ChemieEscape() {
     }
     setIndex((alt) => alt + 1);
     setAuswahl(null);
-    setBeantwortet(false);
+    setAusgeschlossen([]);
+    setTipp(false);
+    setKorrekt(false);
   }
 
   function neustart() {
     setIndex(0);
     setAuswahl(null);
-    setBeantwortet(false);
+    setAusgeschlossen([]);
+    setTipp(false);
+    setKorrekt(false);
     setFragmente([]);
     setFertig(false);
   }
@@ -244,38 +250,54 @@ export default function ChemieEscape() {
     return (
       <div className="chemie">
         <style jsx>{styles}</style>
+
+        <div className="nagelregen" aria-hidden="true">
+          {naegel.map((n) => (
+            <span
+              key={n.id}
+              style={{
+                left: n.links,
+                animationDelay: n.verz,
+                animationDuration: n.dauer,
+                transform: `rotate(${n.drehung})`
+              }}
+            >
+              🔩
+            </span>
+          ))}
+        </div>
+
         <main className="abschluss">
           <div className="erfolg">ESCAPE GESCHAFFT</div>
           <h1>🔓 Der Chemie-Fachraum ist geöffnet!</h1>
-          <p>Du hast alle zehn Schlösser gelöst und die Redoxreaktion rekonstruiert.</p>
+          <p>Du hast alle zehn Schlösser gelöst und den Produktcode geknackt.</p>
 
           <div className="loesung">FeSO₄ + Cu</div>
 
           <div className="auswertung">
-            <h2>Auflösung</h2>
-            <div className="gleichung">
-              <strong>Oxidation:</strong>
-              <span>Fe → Fe²⁺ + 2 e⁻</span>
-            </div>
-            <div className="gleichung">
-              <strong>Reduktion:</strong>
-              <span>Cu²⁺ + 2 e⁻ → Cu</span>
-            </div>
-            <div className="gleichung">
-              <strong>Gesamtreaktion:</strong>
-              <span>Fe + CuSO₄ → FeSO₄ + Cu</span>
-            </div>
+            <h2>Was ist beim Versuch passiert?</h2>
             <p>
-              Eisen gibt Elektronen ab und wird oxidiert. Cu²⁺-Ionen nehmen diese
-              Elektronen auf und werden zu elementarem Kupfer reduziert. Die
-              Sulfat-Ionen bleiben in der Lösung und bilden mit Fe²⁺
-              Eisen(II)-sulfat.
+              Eisen gibt Elektronen ab. Die Kupfer-Ionen nehmen diese Elektronen
+              auf und werden zu elementarem Kupfer. Deshalb entsteht auf dem
+              Eisennagel der rötlich-braune Kupferbelag.
+            </p>
+
+            <div className="merkkasten">
+              <div><strong>Eisen:</strong> Elektronenabgabe → Oxidation</div>
+              <div><strong>Kupfer-Ionen:</strong> Elektronenaufnahme → Reduktion</div>
+              <div><strong>Produkte:</strong> Eisen(II)-sulfat + Kupfer</div>
+            </div>
+
+            <p className="gesamt">
+              Gesamtreaktion: <strong>Fe + CuSO₄ → FeSO₄ + Cu</strong>
             </p>
           </div>
 
           <div className="aktionen">
             <button onClick={neustart}>Noch einmal spielen</button>
-            <Link href="/"><button className="dunkel">Zurück zu CityQuest</button></Link>
+            <Link href="/">
+              <button className="dunkel">Zurück zu CityQuest</button>
+            </Link>
           </div>
         </main>
       </div>
@@ -291,6 +313,7 @@ export default function ChemieEscape() {
           <b>⚗ CHEMIE-FACHRAUM ESCAPE</b>
           <small>Eisennagel in Kupfersulfatlösung · Klasse 9</small>
         </div>
+
         <div className="fortschritt">
           SCHLOSS {index + 1} / 10
           <div className="leiste">
@@ -302,6 +325,7 @@ export default function ChemieEscape() {
       <main className="layout">
         <aside>
           <h4>ESCAPE-ROUTE DURCH DEN FACHRAUM</h4>
+
           {aufgaben.map((x, n) => (
             <div
               key={n}
@@ -339,42 +363,41 @@ export default function ChemieEscape() {
           <h3>{a.frage}</h3>
 
           <div className="antworten">
-            {a.antworten.map((text, n) => {
-              const richtig = beantwortet && n === a.richtig;
-              const falsch =
-                beantwortet && auswahl === n && n !== a.richtig;
-
-              return (
-                <button
-                  key={text}
-                  onClick={() => waehlen(n)}
-                  className={`${richtig ? "richtig" : ""} ${
-                    falsch ? "falsch" : ""
-                  }`}
-                >
-                  <i>{String.fromCharCode(65 + n)}</i>
-                  {text}
-                </button>
-              );
-            })}
+            {sichtbareAntworten.map(({ text, originalIndex }) => (
+              <button
+                key={originalIndex}
+                onClick={() => waehlen(originalIndex)}
+                className={korrekt && originalIndex === a.richtig ? "richtig" : ""}
+                disabled={korrekt}
+              >
+                <i>{String.fromCharCode(65 + originalIndex)}</i>
+                {text}
+              </button>
+            ))}
           </div>
 
-          {beantwortet && (
-            <div className={`feedback ${korrekt ? "gut" : "nichtGut"}`}>
-              <b>{korrekt ? "Schloss geöffnet." : "Noch nicht richtig."}</b>
+          {tipp && !korrekt && (
+            <div className="tipp">
+              <div className="tippkopf">💡 Noch nicht richtig – hier ist ein Tipp:</div>
+              <p>{a.tipp}</p>
+              <strong>
+                Noch {sichtbareAntworten.length} Antwortmöglichkeiten.
+              </strong>
+            </div>
+          )}
+
+          {korrekt && (
+            <div className="feedback">
+              <b>Schloss geöffnet.</b>
               <p>{a.erklaerung}</p>
 
-              {korrekt && a.fragment && (
+              {a.fragment && (
                 <strong>Gefundenes Fragment: {a.fragment}</strong>
-              )}
-
-              {!korrekt && (
-                <button onClick={erneut}>Erneut versuchen</button>
               )}
             </div>
           )}
 
-          {beantwortet && korrekt && (
+          {korrekt && (
             <button className="weiter" onClick={weiter}>
               {index === 9
                 ? "Ausgangstür öffnen"
@@ -411,28 +434,44 @@ section{padding:28px}
 .hinweis{background:linear-gradient(135deg,#0a171f,#142b36);border:1px solid #35515e;border-radius:16px;padding:20px;margin:18px 0}
 .hinweis small{color:#82e7d5;font-weight:900;letter-spacing:.1em}
 .hinweis p{white-space:pre-line;line-height:1.55}
-.schema{background:#071016;color:#f2d35e;text-align:center;padding:18px;border-radius:12px;margin:14px 0;font-size:clamp(19px,3vw,29px);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.schema{background:#071016;color:#f2d35e;text-align:center;padding:18px;border-radius:12px;margin:14px 0;font-size:clamp(18px,2.8vw,27px);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .antworten{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .antworten button{background:#0b1922;color:white;border:1px solid #35515e;border-radius:12px;padding:14px;text-align:left;font-weight:700;cursor:pointer;line-height:1.4}
+.antworten button:hover{border-color:#7894a1}
+.antworten button:disabled{cursor:default}
 .antworten i{font-style:normal;display:inline-grid;place-items:center;background:#203844;width:27px;height:27px;border-radius:7px;margin-right:9px}
 .antworten .richtig{background:#103529;border-color:#56d6a8}
-.antworten .falsch{background:#3b1d22;border-color:#e47777}
-.feedback{margin-top:17px;padding:15px;border-radius:12px;line-height:1.5}
+.tipp{margin-top:17px;padding:16px;border-radius:12px;background:#302a12;border:1px solid #7b6927;line-height:1.5}
+.tippkopf{color:#f2d35e;font-weight:900}
+.tipp p{margin:7px 0}
+.tipp strong{color:#d9c86d;font-size:14px}
+.feedback{margin-top:17px;padding:15px;border-radius:12px;line-height:1.5;background:#103529;border:1px solid #2e765d}
 .feedback p{margin:6px 0}
-.gut{background:#103529;border:1px solid #2e765d}
-.nichtGut{background:#3b1d22;border:1px solid #7d3b45}
 .feedback strong{display:block;color:#f2d35e;margin-top:8px}
-.feedback button,.weiter,.aktionen button{border:0;border-radius:10px;padding:11px 15px;font-weight:900;cursor:pointer}
-.feedback button{margin-top:8px}
+.weiter,.aktionen button{border:0;border-radius:10px;padding:11px 15px;font-weight:900;cursor:pointer}
 .weiter{margin-top:14px;background:#f2d35e;color:#111}
-.abschluss{max-width:840px;margin:50px auto;padding:38px;text-align:center}
+.abschluss{max-width:840px;margin:50px auto;padding:38px;text-align:center;position:relative;z-index:2}
 .erfolg{display:inline-block;color:#82e7d5;background:#173947;border-radius:99px;padding:7px 12px;font-size:12px;font-weight:900;letter-spacing:.08em}
 .loesung{background:#071016;color:#f2d35e;border:1px solid #35515e;border-radius:16px;padding:22px;margin:24px 0;font-size:clamp(32px,6vw,54px);font-weight:900}
 .auswertung{text-align:left;max-width:680px;margin:auto;line-height:1.65}
-.gleichung{display:flex;justify-content:space-between;gap:20px;background:#0b1922;padding:12px 15px;border-radius:10px;margin:8px 0}
+.merkkasten{display:grid;gap:8px;margin:20px 0}
+.merkkasten div{background:#0b1922;padding:12px 15px;border-radius:10px}
+.gesamt{text-align:center;font-size:18px;margin-top:22px}
 .aktionen{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:25px}
 .aktionen button{background:#f2d35e}
 .aktionen .dunkel{background:#18303c;color:white}
-@media(max-width:780px){.layout{grid-template-columns:1fr}aside{display:none}.antworten{grid-template-columns:1fr}header{padding:15px}.fortschritt{min-width:120px}.gleichung{display:block}}
+.nagelregen{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.nagelregen span{position:absolute;top:-60px;font-size:30px;animation:nagelFall linear forwards;filter:grayscale(.35)}
+@keyframes nagelFall{
+0%{transform:translateY(-70px) rotate(0deg);opacity:1}
+85%{opacity:1}
+100%{transform:translateY(110vh) rotate(820deg);opacity:0}
+}
+@media(max-width:780px){
+.layout{grid-template-columns:1fr}
+aside{display:none}
+.antworten{grid-template-columns:1fr}
+header{padding:15px}
+.fortschritt{min-width:120px}
+}
 `;
-
