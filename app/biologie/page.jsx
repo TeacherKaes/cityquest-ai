@@ -242,6 +242,8 @@ export default function BiologieQuiz() {
   const [eingabe, setEingabe] = useState("");
   const [fertig, setFertig] = useState(false);
   const [gesperrt, setGesperrt] = useState(false);
+  const [niveau, setNiveau] = useState(null);
+  const [hilfeOffen, setHilfeOffen] = useState(false);
 
   const finale = index === FRAGEN.length;
   const frage = FRAGEN[index];
@@ -269,12 +271,24 @@ export default function BiologieQuiz() {
         setIndex((alt) => alt + 1);
         setFalsche([]);
         setMeldung("");
+        setHilfeOffen(false);
         setGesperrt(false);
       }, 1250);
     } else {
       setFalsche((alt) => [...alt, i]);
-      setTipp(frage.tipp);
-      setMeldung("Noch nicht. Diese Möglichkeit fällt weg – nutze den Hinweis und versuche es erneut.");
+      if (niveau === "einsteiger") {
+        setTipp(frage.tipp);
+      } else if (niveau === "mittel") {
+        setTipp("");
+        setHilfeOffen(false);
+      } else {
+        setTipp("");
+      }
+      setMeldung(
+        niveau === "profi"
+          ? "Noch nicht. Diese Möglichkeit fällt weg – versuche es erneut."
+          : "Noch nicht. Diese Möglichkeit fällt weg – nutze bei Bedarf die Hilfe und versuche es erneut."
+      );
     }
   }
 
@@ -355,7 +369,34 @@ export default function BiologieQuiz() {
           )}
         </div>
 
-        {!finale && !fertig && (
+        {!niveau && !fertig && (
+          <section className="levelSelect">
+            <div className="eyebrow">WÄHLE DEIN NIVEAU</div>
+            <h2>Wie viel Unterstützung möchtest du?</h2>
+            <p className="levelIntro">
+              Die 18 Fragen bleiben in allen drei Stufen gleich. Nur die Hilfen unterscheiden sich.
+            </p>
+            <div className="levelGrid">
+              <button type="button" onClick={() => setNiveau("einsteiger")}>
+                <span className="levelIcon">🌱</span>
+                <strong>Neuling</strong>
+                <span>Bei jeder Frage wird direkt ein Hinweis angezeigt.</span>
+              </button>
+              <button type="button" onClick={() => setNiveau("mittel")}>
+                <span className="levelIcon">🧭</span>
+                <strong>Entdecker</strong>
+                <span>Du kannst bei jeder Frage selbst eine Hilfe aufrufen.</span>
+              </button>
+              <button type="button" onClick={() => setNiveau("profi")}>
+                <span className="levelIcon">🏆</span>
+                <strong>Profi</strong>
+                <span>Keine Hinweise – du löst die Mission ohne Hilfe.</span>
+              </button>
+            </div>
+          </section>
+        )}
+
+        {niveau && !finale && !fertig && (
           <section className="questionCard">
             <div className="questionMeta">
               <span className="category">{frage.kategorie}</span>
@@ -363,6 +404,28 @@ export default function BiologieQuiz() {
             </div>
 
             <h2>{frage.frage}</h2>
+
+            <div className="levelBar">
+              <span>Niveau: {niveau === "einsteiger" ? "Neuling" : niveau === "mittel" ? "Entdecker" : "Profi"}</span>
+              {niveau === "mittel" && (
+                <button type="button" onClick={() => setHilfeOffen((alt) => !alt)}>
+                  {hilfeOffen ? "Hilfe ausblenden" : "Hilfe anzeigen"}
+                </button>
+              )}
+            </div>
+
+            {niveau === "einsteiger" && (
+              <div className="tipp permanent">
+                <span className="bulb">💡</span>
+                <div><strong>Hinweis</strong><p>{frage.tipp}</p></div>
+              </div>
+            )}
+            {niveau === "mittel" && hilfeOffen && (
+              <div className="tipp permanent">
+                <span className="bulb">💡</span>
+                <div><strong>Hinweis</strong><p>{frage.tipp}</p></div>
+              </div>
+            )}
 
             <div className="antworten">
               {frage.antworten.map((antwort, i) => {
@@ -388,7 +451,7 @@ export default function BiologieQuiz() {
             </div>
 
             {meldung && <div className="meldung">{meldung}</div>}
-            {tipp && (
+            {tipp && niveau !== "einsteiger" && (
               <div className="tipp">
                 <span className="bulb">💡</span>
                 <div>
@@ -813,10 +876,43 @@ export default function BiologieQuiz() {
           color: #d9e8ee;
           border: 1px solid #304b5e;
         }
+
+        .levelSelect {
+          border: 1px solid #203748;
+          background: linear-gradient(145deg, rgba(16, 34, 51, .97), rgba(10, 25, 39, .98));
+          border-radius: 24px;
+          padding: clamp(22px, 4vw, 36px);
+        }
+        .levelSelect h2 { margin-top: 8px; margin-bottom: 8px; }
+        .levelIntro { color: #9fb5c2; margin: 0 0 22px; line-height: 1.55; }
+        .levelGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; }
+        .levelGrid button {
+          min-height: 180px; padding: 22px 18px; border-radius: 18px;
+          border: 1px solid #2a4355; background: #0c1c2b; color: #eaf4f0;
+          cursor: pointer; text-align: left; font: inherit;
+          display: flex; flex-direction: column; gap: 8px;
+          transition: transform .14s ease, border-color .14s ease, background .14s ease;
+        }
+        .levelGrid button:hover { transform: translateY(-2px); border-color: #4ed59e; background: #10283a; }
+        .levelGrid strong { font-size: 20px; }
+        .levelGrid button > span:last-child { color: #9fb5c2; line-height: 1.45; }
+        .levelIcon { font-size: 30px; }
+        .levelBar {
+          display: flex; justify-content: space-between; align-items: center; gap: 10px;
+          margin: -5px 0 15px; color: #8ea6b5; font-size: 12px; font-weight: 850;
+        }
+        .levelBar button {
+          border: 1px solid #345267; border-radius: 999px; padding: 8px 12px;
+          background: #112638; color: #d8e7ed; font: inherit; font-size: 12px;
+          font-weight: 850; cursor: pointer;
+        }
+        .permanent { margin-top: 0; margin-bottom: 15px; }
         @media (max-width: 760px) {
           .top { grid-template-columns: 1fr; }
           .missionBox { width: max-content; text-align: left; }
           .antworten { grid-template-columns: 1fr; }
+          .levelGrid { grid-template-columns: 1fr; }
+          .levelGrid button { min-height: 0; }
           .navPill { display: none; }
         }
         @media (max-width: 520px) {
