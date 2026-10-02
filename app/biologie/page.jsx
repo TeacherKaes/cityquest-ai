@@ -43,13 +43,13 @@ const FRAGEN = [
     kategorie: "Anatomie",
     frage: "Welche Aufgabe haben die Eierstöcke?",
     antworten: [
-      "Sie bilden Eizellen und unter anderem Geschlechtshormone.",
       "Sie sind der gewöhnliche Ort der Befruchtung.",
       "Sie transportieren Urin zur Harnblase.",
       "Sie bilden die Gebärmutterschleimhaut.",
+      "Sie beherbergen die Eizellen; dort reifen Eizellen heran und es werden unter anderem Geschlechtshormone gebildet.",
     ],
-    richtig: 0,
-    tipp: "Gesucht ist ein Organ, das sowohl mit Keimzellen als auch mit Hormonen zusammenhängt.",
+    richtig: 3,
+    tipp: "Gesucht ist ein Organ, das Eizellen enthält und zugleich eine wichtige Rolle bei der Hormonbildung spielt.",
   },
   {
     kategorie: "Fortpflanzung",
@@ -68,11 +68,11 @@ const FRAGEN = [
     frage: "Was beschreibt den Eisprung fachlich am besten?",
     antworten: [
       "Die Gebärmutterschleimhaut wird abgestoßen.",
-      "Eine reife Eizelle wird aus einem Eierstock freigesetzt.",
       "Eine befruchtete Eizelle nistet sich ein.",
       "Die Menstruation endet vollständig.",
+      "Eine reife Eizelle wird aus einem Eierstock freigesetzt.",
     ],
-    richtig: 1,
+    richtig: 3,
     tipp: "Der Vorgang betrifft zunächst den Eierstock und bedeutet noch keine Befruchtung.",
   },
   {
@@ -104,11 +104,11 @@ const FRAGEN = [
     frage: "Welche Kombination beschreibt das Kondom am treffendsten?",
     antworten: [
       "Hormonell; verhindert sicher jeden Eisprung",
-      "Mechanisch; verringert zusätzlich das Risiko vieler sexuell übertragbarer Infektionen",
       "Chemisch; wird dauerhaft in die Gebärmutter eingesetzt",
+      "Mechanisch; verringert zusätzlich das Risiko vieler sexuell übertragbarer Infektionen",
       "Operativ; verhindert die Bildung von Spermien",
     ],
-    richtig: 1,
+    richtig: 2,
     tipp: "Achte sowohl auf die Art der Verhütung als auch auf einen möglichen zusätzlichen Schutz.",
   },
   {
@@ -152,11 +152,11 @@ const FRAGEN = [
     frage: "Welche Aussage über sexuell übertragbare Infektionen (STI) ist fachlich richtig?",
     antworten: [
       "Eine STI verursacht immer sofort sichtbare Beschwerden.",
-      "Eine STI kann auch ohne erkennbare Beschwerden vorliegen.",
       "STI können ausschließlich durch Bakterien verursacht werden.",
       "Wer sich gesund fühlt, kann grundsätzlich keine STI übertragen.",
+      "Eine STI kann auch ohne erkennbare Beschwerden vorliegen.",
     ],
-    richtig: 1,
+    richtig: 3,
     tipp: "Das Fehlen von Beschwerden sagt nicht immer sicher aus, ob eine Infektion vorliegt.",
   },
   {
@@ -176,11 +176,11 @@ const FRAGEN = [
     frage: "Welche Aussage zur Pubertät ist richtig?",
     antworten: [
       "Körperliche Veränderungen laufen bei allen Jugendlichen im gleichen Alter und in gleicher Reihenfolge ab.",
-      "Hormone steuern viele Veränderungen, wobei Zeitpunkt und Verlauf individuell verschieden sein können.",
       "Die Pubertät betrifft ausschließlich die Fortpflanzungsorgane.",
       "Psychische und soziale Veränderungen haben mit der Pubertät nichts zu tun.",
+      "Hormone steuern viele Veränderungen, wobei Zeitpunkt und Verlauf individuell verschieden sein können.",
     ],
-    richtig: 1,
+    richtig: 3,
     tipp: "Pubertät ist ein Entwicklungsprozess mit biologischen und individuellen Unterschieden.",
   },
   {
@@ -212,11 +212,11 @@ const FRAGEN = [
     frage: "Welche Aussage beschreibt Einvernehmlichkeit bei sexuellen Handlungen am besten?",
     antworten: [
       "Ein früheres Ja gilt automatisch auch für spätere Situationen.",
-      "Schweigen bedeutet grundsätzlich Zustimmung.",
       "Zustimmung muss freiwillig sein und kann jederzeit zurückgenommen werden.",
+      "Schweigen bedeutet grundsätzlich Zustimmung.",
       "In einer Beziehung ist eine ausdrückliche Zustimmung nicht mehr wichtig.",
     ],
-    richtig: 2,
+    richtig: 1,
     tipp: "Entscheidend sind Freiwilligkeit, aktuelle Zustimmung und die Möglichkeit, die eigene Entscheidung zu ändern.",
   },
 ];
