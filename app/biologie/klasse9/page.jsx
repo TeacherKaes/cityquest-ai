@@ -3,9 +3,24 @@
 import { useMemo, useState } from "react";
 
 const LEVELS = {
-  neuling: { label: "🌱 Neuling", hintMode: "visible" },
-  entdecker: { label: "🧭 Entdecker", hintMode: "button" },
-  profi: { label: "🏆 Profi", hintMode: "hidden" },
+  neuling: {
+    label: "Neuling",
+    icon: "🌱",
+    subtitle: "Hinweis immer sichtbar",
+    hintMode: "visible",
+  },
+  entdecker: {
+    label: "Entdecker",
+    icon: "🧭",
+    subtitle: "Hinweis bei Bedarf",
+    hintMode: "button",
+  },
+  profi: {
+    label: "Profi",
+    icon: "🏆",
+    subtitle: "Ohne Hinweise",
+    hintMode: "hidden",
+  },
 };
 
 const questions = [
@@ -126,22 +141,232 @@ const questions = [
   },
 ];
 
-const SVG = ({ type }) => {
-  const common = { width: 360, height: 210, viewBox: "0 0 360 210", role: "img", "aria-label": "Zellbiologische Illustration" };
-  const bg = <rect x="0" y="0" width="360" height="210" rx="24" fill="#0b1220" />;
-  const cell = <ellipse cx="180" cy="108" rx="130" ry="74" fill="#10223d" stroke="#38bdf8" strokeWidth="3" />;
+function Illustration({ type }) {
+  const common = {
+    viewBox: "0 0 720 480",
+    role: "img",
+    "aria-label": "Zellbiologische Illustration",
+    className: "h-full w-full",
+  };
 
-  if (type === "nucleus") return <svg {...common}>{bg}{cell}<circle cx="180" cy="108" r="40" fill="#7c3aed" opacity="0.9"/><circle cx="180" cy="108" r="11" fill="#c4b5fd"/><path d="M160 95c10-14 30-12 40 0M160 118c10 14 30 12 40 0" stroke="#ede9fe" strokeWidth="3" fill="none"/></svg>;
-  if (type === "mitochondrion") return <svg {...common}>{bg}{cell}<path d="M108 112c0-28 26-45 64-45s74 17 74 45-36 45-74 45-64-17-64-45Z" fill="#f97316"/><path d="M127 113c18-22 24 20 42-3s26 21 50-5" stroke="#fff7ed" strokeWidth="5" fill="none" strokeLinecap="round"/></svg>;
-  if (type === "ribosome") return <svg {...common}>{bg}{cell}{[...Array(18)].map((_,i)=><circle key={i} cx={95+(i%6)*34} cy={72+Math.floor(i/6)*35} r="8" fill="#facc15"/>)}<path d="M85 160c65-22 125-18 190-4" stroke="#a78bfa" strokeWidth="5" fill="none"/></svg>;
-  if (type === "membrane") return <svg {...common}>{bg}<ellipse cx="180" cy="108" rx="130" ry="74" fill="#10223d" stroke="#22d3ee" strokeWidth="9"/><ellipse cx="180" cy="108" rx="118" ry="62" fill="none" stroke="#67e8f9" strokeWidth="3" strokeDasharray="7 8"/><circle cx="180" cy="108" r="24" fill="#7c3aed"/></svg>;
-  if (type === "roughER") return <svg {...common}>{bg}{cell}<circle cx="225" cy="105" r="28" fill="#7c3aed"/><path d="M92 76c30-18 74-20 101-4M88 101c35-16 73-16 105-2M96 128c32-12 62-11 94 2" stroke="#60a5fa" strokeWidth="7" fill="none" strokeLinecap="round"/>{[...Array(16)].map((_,i)=><circle key={i} cx={97+(i%8)*14} cy={73+Math.floor(i/8)*56} r="4" fill="#fde047"/>)}</svg>;
-  if (type === "golgi") return <svg {...common}>{bg}{cell}{[0,1,2,3,4].map((i)=><path key={i} d={`M120 ${76+i*16} Q180 ${58+i*16} 238 ${78+i*16}`} stroke="#fb7185" strokeWidth="7" fill="none" strokeLinecap="round"/>)}{[0,1,2].map(i=><circle key={i} cx={253+i*13} cy={93+i*18} r="7" fill="#fecdd3"/>)}</svg>;
-  if (type === "chloroplast") return <svg {...common}>{bg}<rect x="72" y="34" width="216" height="142" rx="20" fill="#123d2d" stroke="#4ade80" strokeWidth="4"/>{[0,1,2,3].map(i=><g key={i}><rect x={110+i*35} y="74" width="24" height="9" rx="4" fill="#86efac"/><rect x={110+i*35} y="89" width="24" height="9" rx="4" fill="#86efac"/><rect x={110+i*35} y="104" width="24" height="9" rx="4" fill="#86efac"/></g>)}<path d="M95 142c45-22 125-22 170 0" stroke="#22c55e" strokeWidth="4" fill="none"/></svg>;
-  if (type === "lysosome") return <svg {...common}>{bg}{cell}{[0,1,2,3,4].map((i)=><circle key={i} cx={118+i*30} cy={102+(i%2)*28} r={18-i} fill="#e879f9" opacity="0.85"/>)}<path d="M126 100l10 10m-10 0 10-10M187 127l10 10m-10 0 10-10" stroke="#fdf4ff" strokeWidth="3"/></svg>;
-  if (type === "cytoplasm") return <svg {...common}>{bg}{cell}<circle cx="205" cy="105" r="26" fill="#7c3aed"/>{[0,1,2,3,4,5].map((i)=><ellipse key={i} cx={105+i*28} cy={70+(i%3)*32} rx="12" ry="7" fill="#38bdf8" opacity="0.8"/>)}<path d="M90 145c35-18 65 9 102-7s58 6 82-7" stroke="#93c5fd" strokeWidth="4" fill="none" opacity="0.8"/></svg>;
-  return <svg {...common}>{bg}{cell}<circle cx="180" cy="108" r="30" fill="#7c3aed"/><path d="M95 93c18-18 35 15 53-2s33 16 46-2" stroke="#f97316" strokeWidth="6" fill="none"/><path d="M222 72q35 15 3 31q34 16 0 33" stroke="#fb7185" strokeWidth="6" fill="none"/>{[0,1,2,3].map(i=><circle key={i} cx={116+i*28} cy="145" r="6" fill="#facc15"/>)}</svg>;
-};
+  const shell = (
+    <>
+      <defs>
+        <radialGradient id="cellGlow" cx="42%" cy="38%" r="75%">
+          <stop offset="0%" stopColor="#203764" />
+          <stop offset="55%" stopColor="#14243f" />
+          <stop offset="100%" stopColor="#0b1426" />
+        </radialGradient>
+        <linearGradient id="membraneGrad" x1="0" x2="1">
+          <stop offset="0%" stopColor="#38bdf8" />
+          <stop offset="100%" stopColor="#2dd4bf" />
+        </linearGradient>
+        <filter id="softGlow">
+          <feGaussianBlur stdDeviation="5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      <rect width="720" height="480" rx="34" fill="#07111f" />
+      <circle cx="610" cy="76" r="125" fill="#0ea5e9" opacity="0.07" />
+      <circle cx="76" cy="420" r="150" fill="#8b5cf6" opacity="0.07" />
+    </>
+  );
+
+  const animalCell = (
+    <g>
+      <path
+        d="M118 242c0-110 101-174 245-174 142 0 246 64 246 174S505 416 363 416c-144 0-245-64-245-174Z"
+        fill="url(#cellGlow)"
+        stroke="url(#membraneGrad)"
+        strokeWidth="6"
+      />
+      <path
+        d="M132 242c0-99 92-159 231-159 136 0 231 60 231 159S499 401 363 401c-139 0-231-60-231-159Z"
+        fill="none"
+        stroke="#dbeafe"
+        strokeOpacity="0.15"
+        strokeWidth="2"
+      />
+    </g>
+  );
+
+  if (type === "nucleus") {
+    return (
+      <svg {...common}>
+        {shell}
+        {animalCell}
+        <g filter="url(#softGlow)">
+          <circle cx="365" cy="239" r="93" fill="#5b21b6" stroke="#c4b5fd" strokeWidth="6" />
+          <circle cx="365" cy="239" r="70" fill="#6d28d9" opacity="0.55" />
+          <circle cx="388" cy="219" r="24" fill="#ddd6fe" opacity="0.9" />
+          <path d="M323 212c15-27 43-17 63 2 17 17 35 17 51-3M316 266c20-31 46-20 68 3 18 19 35 18 48 1" fill="none" stroke="#f5f3ff" strokeWidth="7" strokeLinecap="round" opacity="0.9" />
+          <circle cx="315" cy="242" r="6" fill="#f5f3ff" />
+          <circle cx="418" cy="262" r="6" fill="#f5f3ff" />
+        </g>
+      </svg>
+    );
+  }
+
+  if (type === "mitochondrion") {
+    return (
+      <svg {...common}>
+        {shell}
+        {animalCell}
+        <g transform="translate(8 -2)" filter="url(#softGlow)">
+          <path d="M214 263c-8-74 57-129 148-129 94 0 160 52 153 127-7 74-81 117-169 112-83-4-124-40-132-110Z" fill="#b45309" stroke="#fdba74" strokeWidth="7" />
+          <path d="M244 249c20-63 54-16 87-57 27-34 54 35 85-4 28-34 55 25 74-8M245 294c27-51 59 19 88-22 28-39 56 28 85-9 25-31 46 16 65-8" fill="none" stroke="#ffedd5" strokeWidth="10" strokeLinecap="round" />
+        </g>
+      </svg>
+    );
+  }
+
+  if (type === "ribosome") {
+    const dots = Array.from({ length: 28 }, (_, i) => {
+      const x = 205 + (i % 7) * 49 + (i % 2) * 8;
+      const y = 155 + Math.floor(i / 7) * 51;
+      return <circle key={i} cx={x} cy={y} r="10" fill={i % 3 === 0 ? "#fde047" : "#facc15"} opacity="0.95" />;
+    });
+    return (
+      <svg {...common}>
+        {shell}
+        {animalCell}
+        <path d="M170 322c75-38 164-30 237-1 60 24 106 22 144 1" fill="none" stroke="#7c3aed" strokeWidth="10" strokeLinecap="round" opacity="0.9" />
+        {dots}
+        <g opacity="0.4">
+          <circle cx="184" cy="126" r="7" fill="#facc15" />
+          <circle cx="525" cy="144" r="7" fill="#facc15" />
+          <circle cx="542" cy="338" r="7" fill="#facc15" />
+        </g>
+      </svg>
+    );
+  }
+
+  if (type === "membrane") {
+    const lipids = Array.from({ length: 26 }, (_, i) => {
+      const x = 118 + i * 18.7;
+      return (
+        <g key={i} opacity="0.95">
+          <circle cx={x} cy="189" r="6" fill="#67e8f9" />
+          <line x1={x - 2} y1="195" x2={x - 5} y2="211" stroke="#38bdf8" strokeWidth="3" />
+          <line x1={x + 2} y1="195" x2={x + 5} y2="211" stroke="#38bdf8" strokeWidth="3" />
+          <circle cx={x} cy="291" r="6" fill="#67e8f9" />
+          <line x1={x - 2} y1="285" x2={x - 5} y2="269" stroke="#38bdf8" strokeWidth="3" />
+          <line x1={x + 2} y1="285" x2={x + 5} y2="269" stroke="#38bdf8" strokeWidth="3" />
+        </g>
+      );
+    });
+    return (
+      <svg {...common}>
+        {shell}
+        <rect x="90" y="138" width="540" height="204" rx="102" fill="#10213b" stroke="#0ea5e9" strokeWidth="3" />
+        {lipids}
+        <path d="M290 170c18 18 17 36 5 52-15 19-13 40 5 60 16 18 15 38 1 56" fill="none" stroke="#f472b6" strokeWidth="18" strokeLinecap="round" />
+        <path d="M421 173c-17 24-18 45 0 64 18 20 18 41 1 68 17 17 18 32 5 49" fill="none" stroke="#a78bfa" strokeWidth="16" strokeLinecap="round" />
+        <circle cx="544" cy="241" r="22" fill="#f59e0b" opacity="0.95" />
+      </svg>
+    );
+  }
+
+  if (type === "roughER") {
+    const dots = Array.from({ length: 34 }, (_, i) => {
+      const x = 178 + (i % 9) * 37 + (i % 3) * 5;
+      const y = 143 + Math.floor(i / 9) * 62 + (i % 2) * 5;
+      return <circle key={i} cx={x} cy={y} r="6" fill="#fde047" />;
+    });
+    return (
+      <svg {...common}>
+        {shell}
+        {animalCell}
+        <circle cx="477" cy="238" r="67" fill="#5b21b6" stroke="#c4b5fd" strokeWidth="5" />
+        <path d="M168 150c74-45 176-36 260-4M157 210c80-40 183-35 269 0M168 270c75-35 169-30 249 9M188 326c67-28 141-20 205 9" fill="none" stroke="#60a5fa" strokeWidth="14" strokeLinecap="round" opacity="0.9" />
+        {dots}
+      </svg>
+    );
+  }
+
+  if (type === "golgi") {
+    return (
+      <svg {...common}>
+        {shell}
+        {animalCell}
+        <g transform="translate(10 0)" filter="url(#softGlow)">
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <path key={i} d={`M210 ${155 + i * 29} C295 ${118 + i * 29} 397 ${121 + i * 29} 475 ${160 + i * 29}`} fill="none" stroke={i % 2 ? "#fb7185" : "#f472b6"} strokeWidth="14" strokeLinecap="round" />
+          ))}
+          <circle cx="502" cy="177" r="17" fill="#fecdd3" />
+          <circle cx="526" cy="229" r="13" fill="#fda4af" />
+          <circle cx="492" cy="301" r="20" fill="#fecdd3" />
+          <circle cx="548" cy="330" r="10" fill="#fda4af" />
+        </g>
+      </svg>
+    );
+  }
+
+  if (type === "chloroplast") {
+    return (
+      <svg {...common}>
+        {shell}
+        <rect x="118" y="92" width="484" height="296" rx="70" fill="#123c2c" stroke="#4ade80" strokeWidth="8" />
+        <rect x="135" y="109" width="450" height="262" rx="58" fill="#14532d" opacity="0.65" />
+        {[0, 1, 2, 3, 4].map((g) => (
+          <g key={g} transform={`translate(${180 + g * 80} 0)`}>
+            {[0, 1, 2, 3].map((i) => (
+              <rect key={i} x="0" y={164 + i * 28} width="50" height="14" rx="7" fill="#86efac" />
+            ))}
+          </g>
+        ))}
+        <path d="M165 325c83-43 186-44 275-8 44 18 85 17 122 1" fill="none" stroke="#22c55e" strokeWidth="8" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (type === "lysosome") {
+    return (
+      <svg {...common}>
+        {shell}
+        {animalCell}
+        {[0, 1, 2, 3, 4].map((i) => (
+          <g key={i} filter="url(#softGlow)">
+            <circle cx={230 + i * 66} cy={205 + (i % 2) * 70} r={34 - i * 2} fill="#a21caf" stroke="#f0abfc" strokeWidth="4" opacity="0.9" />
+            <path d={`M${218 + i * 66} ${193 + (i % 2) * 70}l24 24m-24 0 24-24`} stroke="#fae8ff" strokeWidth="5" strokeLinecap="round" />
+          </g>
+        ))}
+      </svg>
+    );
+  }
+
+  if (type === "cytoplasm") {
+    return (
+      <svg {...common}>
+        {shell}
+        {animalCell}
+        <circle cx="438" cy="229" r="58" fill="#6d28d9" stroke="#c4b5fd" strokeWidth="4" />
+        <path d="M190 174c27-30 58 12 81-11 27-28 59 15 84-8" fill="none" stroke="#fb923c" strokeWidth="9" strokeLinecap="round" />
+        <path d="M200 309c44-33 80 24 122-10 43-35 77 14 118-3" fill="none" stroke="#38bdf8" strokeWidth="8" strokeLinecap="round" opacity="0.8" />
+        {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+          <circle key={i} cx={190 + i * 48} cy={238 + ((i % 3) - 1) * 55} r="9" fill="#facc15" opacity="0.9" />
+        ))}
+      </svg>
+    );
+  }
+
+  return (
+    <svg {...common}>
+      {shell}
+      {animalCell}
+      <circle cx="363" cy="238" r="59" fill="#6d28d9" stroke="#c4b5fd" strokeWidth="4" />
+      <path d="M171 179c25-37 60 23 88-14 24-30 59 19 84-11" fill="none" stroke="#fb923c" strokeWidth="10" strokeLinecap="round" />
+      <path d="M455 154c-24 20-26 46-2 66 23 20 23 46 0 67 20 17 21 38 3 59" fill="none" stroke="#fb7185" strokeWidth="12" strokeLinecap="round" />
+      {[0, 1, 2, 3, 4, 5].map((i) => (
+        <circle key={i} cx={188 + i * 55} cy="324" r="8" fill="#facc15" />
+      ))}
+      <path d="M209 368c74-34 174-31 265 5" fill="none" stroke="#60a5fa" strokeWidth="8" strokeLinecap="round" opacity="0.75" />
+    </svg>
+  );
+}
 
 export default function Page() {
   const [level, setLevel] = useState("entdecker");
@@ -162,18 +387,21 @@ export default function Page() {
       if (q.letter) setEarnedLetters((prev) => [...prev, q.letter]);
       setWrong([]);
       setHintOpen(false);
-      if (index === questions.length - 1) {
-        setCompleted(true);
-      } else {
-        setIndex((i) => i + 1);
-      }
+      if (index === questions.length - 1) setCompleted(true);
+      else setIndex((i) => i + 1);
     } else {
       setWrong((prev) => (prev.includes(answerIndex) ? prev : [...prev, answerIndex]));
     }
   };
 
   const checkSolution = () => {
-    const normalized = guess.trim().toUpperCase().replace(/Ü/g, "UE").replace(/Ä/g, "AE").replace(/Ö/g, "OE");
+    const normalized = guess
+      .trim()
+      .toUpperCase()
+      .replace(/Ü/g, "UE")
+      .replace(/Ä/g, "AE")
+      .replace(/Ö/g, "OE");
+
     if (normalized === "ZELLKERN") {
       setMessage("Mission geschafft! Du hast das Lösungswort geknackt.");
     } else {
@@ -181,73 +409,201 @@ export default function Page() {
     }
   };
 
+  const answerLetters = ["A", "B", "C", "D"];
+
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8">
-      <div className="mx-auto max-w-4xl">
-        <header className="mb-6 rounded-3xl border border-cyan-500/20 bg-slate-900/80 p-6 shadow-2xl">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <main className="min-h-screen bg-[#050b14] text-slate-100">
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute -left-20 top-12 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
+        <div className="absolute right-0 top-1/3 h-80 w-80 rounded-full bg-violet-500/10 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-4 py-5 md:px-7 md:py-8">
+        <header className="mb-5 overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/75 shadow-2xl backdrop-blur">
+          <div className="flex flex-col gap-5 p-5 md:flex-row md:items-center md:justify-between md:p-7">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-300">KaesbachsQuest</p>
-              <h1 className="mt-2 text-3xl font-black md:text-4xl">Mission Zellwelt</h1>
-              <p className="mt-2 text-slate-300">Biologie · Klasse 9 · Zelle & Zellbestandteile</p>
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
+                <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_15px_rgba(103,232,249,.9)]" />
+                KaesbachsQuest
+              </div>
+              <h1 className="text-3xl font-black tracking-tight md:text-4xl">Mission Zellwelt</h1>
+              <p className="mt-1 text-sm text-slate-400 md:text-base">Biologie · Klasse 9 · Zelle & Zellbestandteile</p>
             </div>
-            <select value={level} onChange={(e)=>setLevel(e.target.value)} className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 font-semibold">
-              {Object.entries(LEVELS).map(([key, value]) => <option key={key} value={key}>{value.label}</option>)}
-            </select>
+
+            <div className="grid grid-cols-3 gap-2 md:w-[430px]">
+              {Object.entries(LEVELS).map(([key, value]) => {
+                const active = level === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => {
+                      setLevel(key);
+                      setHintOpen(false);
+                    }}
+                    className={`rounded-2xl border p-3 text-left transition ${
+                      active
+                        ? "border-cyan-300/70 bg-cyan-300/10 shadow-[0_0_25px_rgba(34,211,238,.12)]"
+                        : "border-white/10 bg-white/[0.025] hover:border-white/20 hover:bg-white/[0.05]"
+                    }`}
+                  >
+                    <div className="text-lg">{value.icon}</div>
+                    <div className={`mt-1 text-sm font-extrabold ${active ? "text-cyan-200" : "text-slate-200"}`}>{value.label}</div>
+                    <div className="mt-0.5 hidden text-[11px] leading-tight text-slate-500 sm:block">{value.subtitle}</div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-cyan-400 transition-all" style={{width:`${progress}%`}} /></div>
-          <div className="mt-2 flex justify-between text-xs text-slate-400"><span>Fortschritt</span><span>{completed ? questions.length : index} / {questions.length}</span></div>
+
+          <div className="border-t border-white/10 px-5 py-4 md:px-7">
+            <div className="mb-2 flex items-center justify-between text-xs font-semibold text-slate-400">
+              <span>MISSIONSFORTSCHRITT</span>
+              <span>{completed ? questions.length : index} / {questions.length}</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-slate-800">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-400 transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
         </header>
 
         {!completed ? (
-          <section className="rounded-3xl border border-slate-800 bg-slate-900 p-5 md:p-8">
-            <div className="mb-5 flex items-center justify-between gap-3">
-              <span className="rounded-full bg-cyan-500/10 px-3 py-1 text-sm font-bold text-cyan-300">Frage {index + 1} von {questions.length}</span>
-              <span className="text-sm text-slate-400">{LEVELS[level].label}</span>
+          <section className="grid gap-5 lg:grid-cols-[0.92fr_1.08fr]">
+            <div className="overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/70 shadow-xl">
+              <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                <span className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Missionsbild</span>
+                <span className="rounded-full bg-white/[0.04] px-3 py-1 text-xs text-slate-500">Zellbiologie</span>
+              </div>
+              <div className="aspect-[3/2] w-full p-3 md:p-4">
+                <div className="h-full overflow-hidden rounded-[22px] border border-white/10 bg-[#07111f]">
+                  <Illustration type={q.image} />
+                </div>
+              </div>
+              <div className="border-t border-white/10 px-5 py-4 text-sm leading-relaxed text-slate-400">
+                Nutze die Abbildung als Orientierung. Sie zeigt Strukturen aus dem Themenfeld der aktuellen Aufgabe, ohne die Lösung zu beschriften.
+              </div>
             </div>
 
-            <div className="mb-6 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/60 p-2"><SVG type={q.image} /></div>
-            <h2 className="text-xl font-bold leading-snug md:text-2xl">{q.question}</h2>
+            <div className="rounded-[28px] border border-white/10 bg-slate-900/70 p-5 shadow-xl md:p-7">
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-cyan-300">
+                  Frage {index + 1} von {questions.length}
+                </span>
+                <span className="text-sm font-bold text-slate-400">{LEVELS[level].icon} {LEVELS[level].label}</span>
+              </div>
 
-            <div className="mt-6 grid gap-3">
-              {q.answers.map((answer, i) => (
-                <button key={answer} disabled={wrong.includes(i)} onClick={()=>choose(i)} className={`rounded-2xl border px-5 py-4 text-left font-semibold transition ${wrong.includes(i) ? "cursor-not-allowed border-slate-800 bg-slate-950 text-slate-600 line-through" : "border-slate-700 bg-slate-800 hover:border-cyan-400 hover:bg-slate-800/70"}`}>
-                  <span className="mr-3 text-cyan-300">{String.fromCharCode(65+i)}.</span>{answer}
-                </button>
-              ))}
-            </div>
+              <h2 className="text-2xl font-black leading-tight text-white md:text-[1.8rem]">{q.question}</h2>
 
-            {wrong.length > 0 && <p className="mt-4 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3 text-sm text-amber-200">Diese Antwort passt noch nicht. Sie wurde entfernt – versuche es erneut.</p>}
+              <div className="mt-7 grid gap-3">
+                {q.answers.map((answer, i) => {
+                  const disabled = wrong.includes(i);
+                  return (
+                    <button
+                      key={`${answer}-${i}`}
+                      disabled={disabled}
+                      onClick={() => choose(i)}
+                      className={`group flex w-full items-start gap-4 rounded-2xl border px-4 py-4 text-left transition md:px-5 ${
+                        disabled
+                          ? "cursor-not-allowed border-red-400/10 bg-red-400/[0.04] text-slate-600"
+                          : "border-white/10 bg-white/[0.035] text-slate-100 hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-cyan-300/[0.06]"
+                      }`}
+                    >
+                      <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border text-sm font-black ${
+                        disabled
+                          ? "border-red-400/15 bg-red-400/[0.05] text-slate-600"
+                          : "border-cyan-400/20 bg-cyan-400/10 text-cyan-300 group-hover:border-cyan-300/50"
+                      }`}>
+                        {answerLetters[i]}
+                      </span>
+                      <span className={`pt-1 text-[15px] font-semibold leading-snug md:text-base ${disabled ? "line-through" : ""}`}>{answer}</span>
+                    </button>
+                  );
+                })}
+              </div>
 
-            <div className="mt-5">
-              {LEVELS[level].hintMode === "visible" && <p className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-100"><strong>Hinweis:</strong> {q.hint}</p>}
-              {LEVELS[level].hintMode === "button" && <>
-                <button onClick={()=>setHintOpen(v=>!v)} className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-bold text-emerald-200">{hintOpen ? "Hinweis ausblenden" : "Hinweis anzeigen"}</button>
-                {hintOpen && <p className="mt-3 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-100">{q.hint}</p>}
-              </>}
-            </div>
+              {wrong.length > 0 && (
+                <div className="mt-4 flex gap-3 rounded-2xl border border-amber-400/15 bg-amber-400/[0.06] p-4 text-sm text-amber-100">
+                  <span className="text-lg">↻</span>
+                  <p>Diese Antwort passt noch nicht. Sie ist deaktiviert – wähle erneut.</p>
+                </div>
+              )}
 
-            <div className="mt-6 rounded-2xl border border-violet-500/20 bg-violet-500/10 p-4">
-              <p className="text-xs font-bold uppercase tracking-wider text-violet-300">Verdiente Buchstaben</p>
-              <p className="mt-2 text-xl font-black tracking-[0.35em]">{shuffledLetters || "—"}</p>
+              <div className="mt-5">
+                {LEVELS[level].hintMode === "visible" && (
+                  <div className="rounded-2xl border border-emerald-400/15 bg-emerald-400/[0.06] p-4">
+                    <p className="text-xs font-black uppercase tracking-[0.16em] text-emerald-300">Hinweis</p>
+                    <p className="mt-2 text-sm leading-relaxed text-emerald-50/90">{q.hint}</p>
+                  </div>
+                )}
+
+                {LEVELS[level].hintMode === "button" && (
+                  <>
+                    <button
+                      onClick={() => setHintOpen((v) => !v)}
+                      className="rounded-xl border border-emerald-400/20 bg-emerald-400/[0.05] px-4 py-2.5 text-sm font-extrabold text-emerald-200 transition hover:border-emerald-300/40 hover:bg-emerald-400/[0.09]"
+                    >
+                      {hintOpen ? "Hinweis ausblenden" : "Hinweis anzeigen"}
+                    </button>
+                    {hintOpen && (
+                      <div className="mt-3 rounded-2xl border border-emerald-400/15 bg-emerald-400/[0.06] p-4 text-sm leading-relaxed text-emerald-50/90">
+                        {q.hint}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              <div className="mt-6 rounded-2xl border border-violet-400/15 bg-violet-400/[0.06] p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-violet-300">Verdiente Buchstaben</p>
+                  <span className="text-xs text-slate-500">Lösungswort</span>
+                </div>
+                <p className="mt-3 min-h-8 text-2xl font-black tracking-[0.4em] text-violet-100">{shuffledLetters || "—"}</p>
+              </div>
             </div>
           </section>
         ) : (
-          <section className="rounded-3xl border border-emerald-500/20 bg-slate-900 p-6 md:p-10 text-center">
-            <div className="mx-auto mb-5 max-w-md overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/60 p-2"><SVG type="nucleus" /></div>
-            <p className="text-sm font-bold uppercase tracking-[0.25em] text-emerald-300">Finale</p>
-            <h2 className="mt-2 text-3xl font-black">Alle Fragen geschafft!</h2>
-            <p className="mt-3 text-slate-300">Ordne deine Buchstaben zum gesuchten Lösungswort.</p>
-            <p className="mt-5 text-3xl font-black tracking-[0.4em] text-violet-300">{shuffledLetters}</p>
-            <div className="mx-auto mt-6 flex max-w-md gap-2">
-              <input value={guess} onChange={(e)=>setGuess(e.target.value)} onKeyDown={(e)=>e.key==="Enter"&&checkSolution()} placeholder="Lösungswort" className="min-w-0 flex-1 rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 uppercase outline-none focus:border-cyan-400" />
-              <button onClick={checkSolution} className="rounded-xl bg-cyan-400 px-5 py-3 font-black text-slate-950">Prüfen</button>
+          <section className="mx-auto max-w-4xl overflow-hidden rounded-[30px] border border-emerald-400/15 bg-slate-900/75 shadow-2xl">
+            <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="min-h-[300px] bg-[#07111f] p-5">
+                <Illustration type="nucleus" />
+              </div>
+              <div className="p-6 md:p-10">
+                <span className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-emerald-300">Finale</span>
+                <h2 className="mt-4 text-3xl font-black md:text-4xl">Alle Fragen geschafft!</h2>
+                <p className="mt-3 text-slate-400">Ordne deine verdienten Buchstaben zum gesuchten Lösungswort.</p>
+                <div className="mt-6 rounded-2xl border border-violet-400/15 bg-violet-400/[0.06] p-5">
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-violet-300">Deine Buchstaben</p>
+                  <p className="mt-3 text-3xl font-black tracking-[0.35em] text-violet-100">{shuffledLetters}</p>
+                </div>
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  <input
+                    value={guess}
+                    onChange={(e) => setGuess(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && checkSolution()}
+                    placeholder="Lösungswort eingeben"
+                    className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 font-bold uppercase outline-none transition placeholder:normal-case placeholder:font-medium placeholder:text-slate-600 focus:border-cyan-300/60"
+                  />
+                  <button onClick={checkSolution} className="rounded-2xl bg-cyan-300 px-6 py-3.5 font-black text-slate-950 transition hover:bg-cyan-200">Prüfen</button>
+                </div>
+                {message && (
+                  <p className={`mt-5 rounded-2xl border p-4 text-sm font-semibold ${
+                    message.startsWith("Mission")
+                      ? "border-emerald-400/15 bg-emerald-400/[0.06] text-emerald-200"
+                      : "border-amber-400/15 bg-amber-400/[0.06] text-amber-100"
+                  }`}>
+                    {message}
+                  </p>
+                )}
+              </div>
             </div>
-            {message && <p className={`mx-auto mt-5 max-w-xl rounded-xl p-4 font-semibold ${message.startsWith("Mission") ? "bg-emerald-500/10 text-emerald-200" : "bg-amber-500/10 text-amber-200"}`}>{message}</p>}
           </section>
         )}
 
-        <footer className="py-6 text-center text-xs text-slate-500">KaesbachsQuest · Zellbiologie · responsive für PC, Tablet und Smartphone</footer>
+        <footer className="py-6 text-center text-xs text-slate-600">KaesbachsQuest · Zellbiologie · Klasse 9</footer>
       </div>
     </main>
   );
